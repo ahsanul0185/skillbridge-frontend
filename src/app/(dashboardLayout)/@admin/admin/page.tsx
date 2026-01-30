@@ -1,7 +1,6 @@
+import { redirect } from 'next/navigation'
 import React from 'react'
 
 export default function AdminDashboard() {
-  return (
-    <div>AdminDashboard</div>
-  )
+  return  redirect('/admin/analytics')
 }

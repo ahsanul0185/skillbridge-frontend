@@ -1,25 +1,12 @@
-// [
-//   {
-//     title: "User Management",
-//     url: "#",
-//     items: [
-//       {
-//         title: "Analytics",
-//         url: "/analytics",
-//       },
-//       {
-//         title: "Banned Users",
-//         url: "/banned-users",
-//       },
-//     ],
-//   },
-// ];
+import { LucideIcon } from "lucide-react";
 
 export interface Route {
-    title : string;
-    url : string;
-    items : {
-        title : string, 
-        url : string;
-    }[];
+  title: string;
+  url: string;
+  icon?: LucideIcon;
+  items: {
+    title: string;
+    url: string;
+    icon?: LucideIcon;
+  }[];
 }

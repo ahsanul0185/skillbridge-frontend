@@ -17,12 +17,12 @@ export interface Category {
   subjects: Subject[];
 }
 
-
 export enum UserRoles {
-    ADMIN,
-    TUTOR,
-    STUDENT
+  ADMIN = "ADMIN",
+  STUDENT = "STUDENT",
+  TUTOR = "TUTOR"
 }
+
 export enum UserStatus {
     ACTIVE,
     BANNED

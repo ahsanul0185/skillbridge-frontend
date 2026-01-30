@@ -19,6 +19,8 @@ import { studentRoutes } from "@/routes/studentRoutes"
 import { tutorRoutes } from "@/routes/tutorRoutes"
 import { NavUser } from "@/components/ui/nav-user"
 import { Route, User, UserRoles } from "@/types"
+import Image from "next/image"
+import { Roles } from "@/constants/roles"
 
 // This is sample data.
 const data = {
@@ -54,13 +56,13 @@ export function AppSidebar({user, ...props }: {user : User} & React.ComponentPro
   let routes : Route[] = [];
 
   switch (user.role) {
-    case UserRoles.ADMIN:
+    case Roles.admin :
       routes = adminRoutes;
       break;
-    case UserRoles.STUDENT:
+    case Roles.student:
       routes = studentRoutes;
       break;
-    case UserRoles.TUTOR:
+    case Roles.tutor:
       routes = tutorRoutes;
       break;
     default:
@@ -72,10 +74,10 @@ export function AppSidebar({user, ...props }: {user : User} & React.ComponentPro
     <Sidebar {...props}>
 
       <SidebarHeader>
-        <Link href="/" className="flex items-center gap-2 mb-1.5">
+        <Link href="/" className="flex items-center gap-2 mb-1.5 p-1">
               <img
-                src="./skillbridge.svg"
-                className="max-h-6 invert"
+                src="/skillbridge.svg"
+                className="w-6 max-h-6 invert"
                 alt="skillbridge logo"
               />
               <span className={`text-2xl text-sidebar-foreground tracking-wider font-semibold font-logan`}>
@@ -84,9 +86,9 @@ export function AppSidebar({user, ...props }: {user : User} & React.ComponentPro
             </Link>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="gap-12">
         {/* We create a SidebarGroup for each parent. */}
-        {routes.map((item) => (
+        {/* {routes.map((item) => (
           <SidebarGroup key={item.title}>
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -95,6 +97,24 @@ export function AppSidebar({user, ...props }: {user : User} & React.ComponentPro
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <Link href={item.url}>{item.title}</Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))} */}
+        {routes.map((group) => (
+          <SidebarGroup key={group.title}>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {group.items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild tooltip={item.title}>
+                      <Link href={item.url} className="flex items-center gap-2">
+                        {item.icon && <item.icon className="size-4" />}
+                        <span>{item.title}</span>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

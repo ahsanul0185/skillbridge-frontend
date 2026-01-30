@@ -1,7 +1,5 @@
-import React from 'react'
+import { redirect } from 'next/navigation'
 
 export default function TutorPage() {
-  return (
-    <div>TutorPage</div>
-  )
+  return  redirect('/tutor/dashboard')
 }

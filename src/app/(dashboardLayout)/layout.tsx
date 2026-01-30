@@ -2,22 +2,15 @@ export const dynamic = "force-dynamic";
 
 import { AppSidebar } from "@/components/layout/app-sidebar"
 import { ModeToggle } from "@/components/layout/ModeToggle";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Role } from "@/constants/roles"
+import { Roles } from "@/constants/roles";
 import { userService } from "@/services/user.service"
+import { UserRoles } from "@/types";
 
 export default async function DashboardLayout({admin, student, tutor} : {children : React.ReactNode, admin : React.ReactNode, student : React.ReactNode, tutor : React.ReactNode}) {
 
@@ -38,7 +31,7 @@ export default async function DashboardLayout({admin, student, tutor} : {childre
           {/* <ModeToggle /> */}
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">
-          {(data.user.role === Role.admin) ? admin : (data.user.role === Role.student) ? student : (data.user.role === Role.tutor) ? tutor : null}
+          {(data?.user?.role === Roles.admin) ? admin : (data?.user?.role === Roles.student) ? student : (data?.user?.role === Roles.tutor) ? tutor : null}
         </div>
       </SidebarInset>
     </SidebarProvider>

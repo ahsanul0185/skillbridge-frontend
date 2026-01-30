@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Role } from "@/constants/roles";
+import { Roles } from "@/constants/roles";
 import { userService } from "@/services/user.service";
 
 export async function proxy (request : NextRequest) {
@@ -17,25 +17,28 @@ export async function proxy (request : NextRequest) {
   }
 
   if (isAuthenticated && (pathname.startsWith("/login") || pathname.startsWith("/register"))) {
-    if (userRole === Role.tutor) return NextResponse.redirect(new URL("/tutor/dashboard", request.url));
-    if (userRole === Role.admin) return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    if (userRole === Roles.tutor) return NextResponse.redirect(new URL("/tutor/dashboard", request.url));
+    if (userRole === Roles.admin) return NextResponse.redirect(new URL("/admin", request.url));
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if (!isAuthenticated && !pathname.startsWith("/login") && !pathname.startsWith("/register")) {
+  if (!isAuthenticated && (pathname.startsWith("/dashboard") || pathname.startsWith("/tutor") || pathname.startsWith("/admin"))) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (userRole === Role.admin && pathname.startsWith("/dashboard")) {
-    return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+  if (pathname.startsWith("/admin") && userRole !== Roles.admin) {
+    const redirectPath = userRole === Roles.tutor ? "/tutor/dashboard" : "/dashboard";
+    return NextResponse.redirect(new URL(redirectPath, request.url));
   }
 
-  if (userRole !== Role.admin && pathname.startsWith("/admin/dashboard")) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  if (pathname.startsWith("/tutor") && userRole !== Roles.tutor) {
+    const redirectPath = userRole === Roles.admin ? "/admin" : "/dashboard";
+    return NextResponse.redirect(new URL(redirectPath, request.url));
   }
 
-  if (userRole === Role.tutor && pathname.startsWith("/dashboard") && !pathname.startsWith("/tutor")) {
-    return NextResponse.redirect(new URL("/tutor/dashboard", request.url));
+  if (pathname.startsWith("/dashboard") && userRole !== Roles.student) {
+    const redirectPath = userRole === Roles.admin ? "/admin" : "/tutor/dashboard";
+    return NextResponse.redirect(new URL(redirectPath, request.url));
   }
 
   return NextResponse.next();
@@ -43,10 +46,10 @@ export async function proxy (request : NextRequest) {
 
 export const config = {
   matcher: [
-    "/dashboard/:path*", 
-    "/admin/dashboard/:path*", 
-    "/tutor/dashboard/:path*", 
-    "/login", 
-    "/register"
+    "/dashboard/:path*",
+    "/admin/:path*",
+    "/tutor/:path*",
+    "/login",
+    "/register",
   ],
 };

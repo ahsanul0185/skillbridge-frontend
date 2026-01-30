@@ -4,7 +4,7 @@ export default function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2 mb-1.5">
       <img
-        src="./skillbridge.svg"
+        src="/skillbridge.svg"
         className="max-h-6 dark:invert"
         alt="SkillBridge Logo"
       />
