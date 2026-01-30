@@ -1,17 +1,19 @@
 "use client";
 
 
-import { Menu } from "lucide-react";
+import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-import { Accordion } from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
+  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
+  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import {
   Sheet,
@@ -22,16 +24,18 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
+import { User } from "@/types";
 
 interface MenuItem {
   title: string;
   url: string;
   description?: string;
   icon?: React.ReactNode;
-  items?: MenuItem[];
+  items?: any;
 }
 
-interface Navbar1Props {
+
+interface NavbarProps {
   className?: string;
   logo?: {
     url: string;
@@ -50,7 +54,27 @@ interface Navbar1Props {
       title: string;
       url: string;
     };
+    dashboard: {
+      title: string;
+      url: string;
+    };
   };
+  user?: User;
+}
+
+export interface Subject {
+  id: string;
+  name: string;
+  categoryId: string;
+  createdAt: string; 
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  subjects: Subject[];
 }
 
 const Navbar = ({
@@ -69,13 +93,50 @@ const Navbar = ({
       title: "Categories",
       url: "/about",
     },
+     {
+      title: "Products",
+      url: "#",
+      items: [
+        {
+          title: "Blog",
+          description: "The latest industry news, updates, and info",
+          icon: <Book className="size-5 shrink-0" />,
+          url: "#",
+        },
+        {
+          title: "Company",
+          description: "Our mission is to innovate and empower the world",
+          icon: <Trees className="size-5 shrink-0" />,
+          url: "#",
+        },
+        {
+          title: "Careers",
+          description: "Browse job listing and discover our workspace",
+          icon: <Sunset className="size-5 shrink-0" />,
+          url: "#",
+        },
+        {
+          title: "Support",
+          description:
+            "Get in touch with our support team or visit our community forums",
+          icon: <Zap className="size-5 shrink-0" />,
+          url: "#",
+        },
+      ],
+    },
+    
   ],
   auth = {
     login: { title: "Login", url: "/login" },
     signup: { title: "Sign up", url: "/register" },
+    dashboard: { title: "Dashboard", url: "/dashboard" },
   },
+  user,
   className,
-}: Navbar1Props) => {
+}: NavbarProps) => {
+
+
+
   return (
     <section className={cn("py-4", className)}>
       <div className="container mx-auto px-4 ">
@@ -83,16 +144,16 @@ const Navbar = ({
         <nav className="hidden items-center justify-between lg:flex">
           <div className="flex items-center gap-16">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2 mb-1.5">
+            <Link href={logo.url} className="flex items-center gap-2 mb-1.5">
               <img
                 src={logo.src}
                 className="max-h-6 dark:invert"
                 alt={logo.alt}
               />
-              <span className={`text-2xl tracking-wider font-semibold font-logan`}>
+              <span className={`text-2xl text-primary tracking-wider font-semibold font-logan`}>
                 {logo.title}
               </span>
-            </a>
+            </Link>
             <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
@@ -103,12 +164,21 @@ const Navbar = ({
           </div>
           <div className="flex gap-2">
             <ModeToggle />
-            <Button asChild variant="outline" size="sm">
-              <Link href={auth.login.url}>{auth.login.title}</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href={auth.signup.url}>{auth.signup.title}</Link>
-            </Button>
+            {
+              user ? 
+              <Button asChild size="sm">
+                <Link href={auth.dashboard.url}>{auth.dashboard.title}</Link>
+              </Button> : 
+              <>
+               <Button asChild variant="outline" size="sm">
+                  <Link href={auth.login.url}>{auth.login.title}</Link>
+                </Button>
+                <Button asChild size="sm">
+                  <Link href={auth.signup.url}>{auth.signup.title}</Link>
+                </Button>
+              </> 
+            }
+           
           </div>
         </nav>
 
@@ -116,13 +186,16 @@ const Navbar = ({
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            <Link href={logo.url} className="flex items-center gap-2 mb-1.5">
               <img
                 src={logo.src}
-                className="max-h-8 dark:invert"
+                className="max-h-6 dark:invert"
                 alt={logo.alt}
               />
-            </a>
+              <span className={`text-2xl text-primary tracking-wider font-semibold font-logan`}>
+                {logo.title}
+              </span>
+            </Link>
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon">
@@ -132,13 +205,14 @@ const Navbar = ({
               <SheetContent className="overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle>
-                    <a href={logo.url} className="flex items-center gap-2">
+                    {/* <Link href={logo.url} className="flex items-center gap-2 w-8">
                       <img
                         src={logo.src}
                         className="max-h-8 dark:invert"
                         alt={logo.alt}
                       />
-                    </a>
+                    </Link> */}
+                    <ModeToggle />
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-6 p-4">
@@ -150,15 +224,26 @@ const Navbar = ({
                     {menu.map((item) => renderMobileMenuItem(item))}
                   </Accordion>
 
-                  <div className="flex flex-col gap-3">
-                    <Button asChild variant="outline">
-                      <Link href={auth.login.url}>{auth.login.title}</Link>
-                    </Button>
-                    <Button asChild>
-                      <Link href={auth.signup.url}>{auth.signup.title}</Link>
-                    </Button>
-                  </div>
+                  <div className="flex flex-col gap-2">
+                    {
+                      user ? 
+                      <Button asChild size="sm">
+                        <Link href={auth.dashboard.url}>{auth.dashboard.title}</Link>
+                      </Button> : 
+                      <>
+                      <Button asChild variant="outline" size="sm">
+                          <Link href={auth.login.url}>{auth.login.title}</Link>
+                        </Button>
+                        <Button asChild size="sm">
+                          <Link href={auth.signup.url}>{auth.signup.title}</Link>
+                        </Button>
+                      </> 
+                    }
+                
                 </div>
+
+                </div>
+
               </SheetContent>
             </Sheet>
           </div>
@@ -168,25 +253,124 @@ const Navbar = ({
   );
 };
 
+
 const renderMenuItem = (item: MenuItem) => {
+  if (item.items && item.title === "Categories") {
+    return (
+      <NavigationMenuItem key={item.title}>
+        <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+        <NavigationMenuContent className="bg-popover text-popover-foreground">
+          {item.items.map((subItem : Category) => (
+            <NavigationMenuLink asChild key={subItem.id} className="w-80">
+              <CategoryLink item={subItem} />
+            </NavigationMenuLink>
+          ))}
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+    );
+  }
+
+  // if (item.items) {
+  //   return (
+  //     <NavigationMenuItem key={item.title}>
+  //       <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+  //       <NavigationMenuContent className="bg-popover text-popover-foreground">
+  //         {item.items.map((subItem) => (
+  //           <NavigationMenuLink asChild key={subItem.title} className="w-80">
+  //             <SubMenuLink item={subItem} />
+  //           </NavigationMenuLink>
+  //         ))}
+  //       </NavigationMenuContent>
+  //     </NavigationMenuItem>
+  //   );
+  // }
+
   return (
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
-        asChild
-        className="group inline-flex w-max items-center justify-center bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground"
+        href={item.url}
+        className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground"
       >
-        <Link href={item.url}>{item.title}</Link>
+        {item.title}
       </NavigationMenuLink>
     </NavigationMenuItem>
   );
 };
 
 const renderMobileMenuItem = (item: MenuItem) => {
+
+    if (item.items && item.title === "Categories") {
+    return (
+      <AccordionItem key={item.title} value={item.title} className="border-b-0">
+        <AccordionTrigger className="text-md py-0 font-semibold hover:no-underline">
+          {item.title}
+        </AccordionTrigger>
+        <AccordionContent className="mt-2">
+          {item.items.map((subItem : Category) => (
+            <CategoryLink key={subItem.id} item={subItem} />
+          ))}
+        </AccordionContent>
+      </AccordionItem>
+    );
+  }
+
+  // if (item.items) {
+  //   return (
+  //     <AccordionItem key={item.title} value={item.title} className="border-b-0">
+  //       <AccordionTrigger className="text-md py-0 font-semibold hover:no-underline">
+  //         {item.title}
+  //       </AccordionTrigger>
+  //       <AccordionContent className="mt-2">
+  //         {item.items.map((subItem : MenuItem) => (
+  //           <SubMenuLink key={subItem.title} item={subItem} />
+  //         ))}
+  //       </AccordionContent>
+  //     </AccordionItem>
+  //   );
+  // }
+
   return (
-    <Link key={item.title} href={item.url} className="text-md font-semibold">
+    <a key={item.title} href={item.url} className="text-md font-semibold">
       {item.title}
-    </Link>
+    </a>
   );
 };
+
+const SubMenuLink = ({ item }: { item: MenuItem }) => {
+  return (
+    <a
+      className="flex min-w-80 flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-muted hover:text-accent-foreground"
+      href={item.url}
+    >
+      <div className="text-foreground">{item.icon}</div>
+      <div>
+        <div className="text-sm font-semibold">{item.title}</div>
+        {item.description && (
+          <p className="text-sm leading-snug text-muted-foreground">
+            {item.description}
+          </p>
+        )}
+      </div>
+    </a>
+  );
+};
+
+const CategoryLink = ({ item }: { item: Category }) => {
+  return (
+    <div
+      className="flex min-w-80 flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
+    >
+      <div>
+        <Link href="#" className="text-sm text-secondary-foreground font-semibold hover:text-primary">{item.name}</Link>
+        {item.subjects.length > 0 && (
+          <div className="flex flex-col items-start gap-0.5 mt-1 ml-2">
+            {item.subjects.map((subject) => <Link key={subject.id} className="text-sm leading-snug text-muted-foreground hover:text-primary" href="">{subject.name}</Link>)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 
 export { Navbar };

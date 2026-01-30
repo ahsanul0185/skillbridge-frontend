@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Faustina, Geist, Geist_Mono, Slabo_13px } from "next/font/google";
+import { Faustina, Geist, Geist_Mono, Lexend, Slabo_13px } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -15,6 +15,11 @@ const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
+
+const lexend = Lexend({
+    variable: "--font-lexend",
+  subsets : ["latin"]
+})
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -38,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${loganFive.variable} antialiased`}
+        className={`${loganFive.variable} ${lexend.className} antialiased`}
       >
         <ThemeProvider
           attribute="class"

@@ -1,13 +1,13 @@
 import * as React from "react"
 
-import { SearchForm } from "@/components/layout/search-form"
-import { VersionSwitcher } from "@/components/layout/version-switcher"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -15,10 +15,11 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { adminRoutes } from "@/routes/adminRoutes"
-import type { Route } from "@/types"
+import type { Route, User } from "@/types"
 import { Role } from "@/constants/roles"
 import { studentRoutes } from "@/routes/studentRoutes"
 import { tutorRoutes } from "@/routes/tutorRoutes"
+import { NavUser } from "@/components/ui/nav-user"
 
 // This is sample data.
 const data = {
@@ -49,7 +50,7 @@ const data = {
   ],
 }
 
-export function AppSidebar({user, ...props }: {user : {role : string}} & React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({user, ...props }: {user : User} & React.ComponentProps<typeof Sidebar>) {
 
   let routes : Route[] = [];
 
@@ -70,6 +71,20 @@ export function AppSidebar({user, ...props }: {user : {role : string}} & React.C
 
   return (
     <Sidebar {...props}>
+
+      <SidebarHeader>
+        <Link href="/" className="flex items-center gap-2 mb-1.5">
+              <img
+                src="./skillbridge.svg"
+                className="max-h-6 invert"
+                alt="skillbridge logo"
+              />
+              <span className={`text-2xl text-sidebar-foreground tracking-wider font-semibold font-logan`}>
+                SkillBridge
+              </span>
+            </Link>
+      </SidebarHeader>
+
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
         {routes.map((item) => (
@@ -89,6 +104,11 @@ export function AppSidebar({user, ...props }: {user : {role : string}} & React.C
           </SidebarGroup>
         ))}
       </SidebarContent>
+
+      <SidebarFooter>
+        <NavUser user={user} />
+      </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   )
