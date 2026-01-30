@@ -15,11 +15,10 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { adminRoutes } from "@/routes/adminRoutes"
-import type { Route, User } from "@/types"
-import { Role } from "@/constants/roles"
 import { studentRoutes } from "@/routes/studentRoutes"
 import { tutorRoutes } from "@/routes/tutorRoutes"
 import { NavUser } from "@/components/ui/nav-user"
+import { Route, User, UserRoles } from "@/types"
 
 // This is sample data.
 const data = {
@@ -55,13 +54,13 @@ export function AppSidebar({user, ...props }: {user : User} & React.ComponentPro
   let routes : Route[] = [];
 
   switch (user.role) {
-    case Role.admin:
+    case UserRoles.ADMIN:
       routes = adminRoutes;
       break;
-    case Role.student:
+    case UserRoles.STUDENT:
       routes = studentRoutes;
       break;
-    case Role.tutor:
+    case UserRoles.TUTOR:
       routes = tutorRoutes;
       break;
     default:

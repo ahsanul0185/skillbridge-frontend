@@ -16,3 +16,14 @@ export interface Category {
   createdAt: string;
   subjects: Subject[];
 }
+
+
+export enum UserRoles {
+    ADMIN,
+    TUTOR,
+    STUDENT
+}
+export enum UserStatus {
+    ACTIVE,
+    BANNED
+}

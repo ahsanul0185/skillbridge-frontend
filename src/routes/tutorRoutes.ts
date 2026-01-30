@@ -2,7 +2,7 @@ import type { Route } from "@/types";
 
  export const tutorRoutes : Route [] = [
     {
-      title: "Tutor",
+      title: "",
       url: "#",
       items: [
         {

@@ -1,4 +1,4 @@
-import { Category } from "."
+import { Category, UserRoles, UserStatus } from "."
 
 export interface User {
   id: string
@@ -10,16 +10,6 @@ export interface User {
   updatedAt?: Date | string
   role: UserRoles
   status?: UserStatus
-}
-
-export enum UserRoles {
-    ADMIN,
-    TUTOR,
-    STUDENT
-}
-export enum UserStatus {
-    ACTIVE,
-    BANNED
 }
 
 
@@ -41,8 +31,8 @@ export interface Availability {
   id: string;
   tutorId: string;
   day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-  startTime: string; // e.g., "19:00"
-  endTime: string;   // e.g., "20:00"
+  startTime: string;
+  endTime: string;
   status: "AVAILABLE" | "BOOKED";
 }
 
