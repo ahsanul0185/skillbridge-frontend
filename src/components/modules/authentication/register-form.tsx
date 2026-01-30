@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { env } from "@/env";
 
 const formSchema = z.object({
   name: z.string().min(1, "This field is required"),
@@ -54,7 +55,7 @@ export function RegisterForm({
     onSubmit: async ({ value }) => {
       const toastId = toast.loading("Creating user");
       try {
-        const { data, error } = await authClient.signUp.email(value);
+        const { data, error } = await authClient.signUp.email({...value, callbackURL: `${env.NEXT_PUBLIC_FRONTEND_URL}/dashboard`,});
 
         if (error) {
           toast.error(error.message, { id: toastId });
@@ -69,6 +70,7 @@ export function RegisterForm({
         }
       } catch (error) {
         toast.error("Something went wrong. Please try again.", { id: toastId });
+        console.log(error)
       }
     },
   });
@@ -194,7 +196,7 @@ export function RegisterForm({
         />
       </FieldGroup>
 
-      <Button type="submit">Register</Button>
+      <Button type="submit" className="cursor-pointer">Register</Button>
       {/* <Button onClick={() => handleGoogleLogin()} variant="outline" type="button">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path
