@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
-import { User } from "@/types";
+import { Category, User } from "@/types";
 
 interface MenuItem {
   title: string;
@@ -62,20 +62,6 @@ interface NavbarProps {
   user?: User;
 }
 
-export interface Subject {
-  id: string;
-  name: string;
-  categoryId: string;
-  createdAt: string; 
-}
-
-export interface Category {
-  id: string;
-  name: string;
-  description: string;
-  createdAt: string;
-  subjects: Subject[];
-}
 
 const Navbar = ({
   logo = {
@@ -138,7 +124,7 @@ const Navbar = ({
 
 
   return (
-    <section className={cn("py-4", className)}>
+    <section className={cn("py-4 bg-background z-50 border-b", className)}>
       <div className="container mx-auto px-4 ">
         {/* Desktop Menu */}
         <nav className="hidden items-center justify-between lg:flex">
