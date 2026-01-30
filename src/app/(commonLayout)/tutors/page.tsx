@@ -13,7 +13,7 @@ export default async function TutorsPage({
   const filters = await searchParams;
 
   const [tutorsRes, categoriesRes] = await Promise.all([
-    tutorService.getAllTutors({ ...filters }),
+    tutorService.getAllTutors({ ...filters }, {cache : "no-store"}),
     categoryService.getAllCategories(),
   ]);
 

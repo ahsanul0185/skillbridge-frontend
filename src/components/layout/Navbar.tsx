@@ -347,10 +347,10 @@ const CategoryLink = ({ item }: { item: Category }) => {
       className="flex min-w-80 flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
     >
       <div>
-        <Link href="#" className="text-sm text-secondary-foreground font-semibold hover:text-primary">{item.name}</Link>
+        <Link href={`/tutors?categoryId=${item.id}`} className="text-sm text-secondary-foreground font-semibold hover:text-primary">{item.name}</Link>
         {item.subjects.length > 0 && (
           <div className="flex flex-col items-start gap-0.5 mt-1 ml-2">
-            {item.subjects.map((subject) => <Link key={subject.id} className="text-sm leading-snug text-muted-foreground hover:text-primary" href="">{subject.name}</Link>)}
+            {item.subjects.map((subject) => <Link href={`/tutors?categoryId=${item.id}&subjectId=${subject.id}`} key={subject.id} className="text-sm leading-snug text-muted-foreground hover:text-primary">{subject.name}</Link>)}
           </div>
         )}
       </div>

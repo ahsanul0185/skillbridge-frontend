@@ -5,6 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TutorProfile } from "@/types";
+import Link from "next/link";
 // Import the interface we created earlier
 
 interface TutorCardProps {
@@ -78,8 +79,10 @@ export default function TutorCard({ tutor }: TutorCardProps) {
       </CardContent>
 
       <CardFooter className="bg-background border-t p-4 flex items-center gap-[5%]">
-        <Button className="font-semibold w-[47.5%]" variant="outline">
-          View Profile
+        <Button asChild className="font-semibold w-[47.5%]" variant="outline">
+          <Link href={`/tutors/${tutor.id}`}>
+            View Profile
+          </Link>
         </Button>
         
         <Button className="font-semibold w-[47.5%]" variant="default">

@@ -45,4 +45,19 @@ export const tutorService = {
       };
     }
   },
+  getTutorById: async (tutorId : string) => {
+    try {
+      
+      const res = await fetch(`${API_URL}/api/tutors/${tutorId}`);
+
+      const data = await res.json();
+
+      return { data, error: null };
+    } catch (error: any) {
+      return {
+        data: null,
+        error: { message: error?.message || "Something went wrong" },
+      };
+    }
+  },
 };
