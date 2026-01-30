@@ -26,7 +26,7 @@ export default async function TutorsPage({
   };
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 ">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Left Sidebar */}
         <div className="flex-shrink-0">
