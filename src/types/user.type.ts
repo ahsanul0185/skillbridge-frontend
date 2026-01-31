@@ -6,10 +6,21 @@ export interface User {
   email: string
   emailVerified?: boolean
   image?: string | null
+  phone?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   role: UserRoles
   status?: UserStatus
+  tutor?: TutorProfile
+}
+
+export interface UserProfileFormProps {
+    name: string;
+    email: string;
+    image: string;
+    phone: string;
+    role: string;
+    status: string;
 }
 
 
