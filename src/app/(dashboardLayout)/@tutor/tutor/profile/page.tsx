@@ -20,7 +20,7 @@ export default async function TutorProfile() {
 
       <div className="flex flex-col gap-10">
         {/* User Base Data Form */}
-        <UserProfileForm user={user} tutor={data.data.tutorProfile} />
+        <UserProfileForm user={user} />
         <TutorProfileForm tutor={data.data.tutorProfile} categories={categoriesData.data}/>
         
         {/* You can drop your TutorProfile component here later */}

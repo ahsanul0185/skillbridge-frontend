@@ -65,8 +65,7 @@ export const tutorService = {
     subjectIds: string[],
   ) {
     try {
-
-      console.log(subjectIds)
+      console.log(subjectIds);
 
       const cookieStore = await cookies();
 
@@ -91,20 +90,19 @@ export const tutorService = {
           Cookie: cookieStore.toString(),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({subjectIds}),
+        body: JSON.stringify({ subjectIds }),
       });
 
       const subjectData = await subjectRes.json();
 
       if (!subjectData.success) {
-        return {data : subjectData, error : subjectData.message}
+        return { data: subjectData, error: subjectData.message };
       }
-
 
       return { data: tutorData, error: null };
     } catch (error) {
       console.log(error);
       return { data: null, error: { message: "Something went wrong" } };
     }
-  },
+  }
 };

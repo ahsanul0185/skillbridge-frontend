@@ -31,9 +31,7 @@ const profileSchema = z.object({
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
 });
 
-export function UserProfileForm({user, tutor}:  {user : Partial<User>, tutor : TutorProfileDashboard}) {
-
-    const {avgRating, isFeatured, totalReviews} = tutor;
+export function UserProfileForm({user}:  {user : Partial<User>}) {
 
   const form = useForm({
     defaultValues: {

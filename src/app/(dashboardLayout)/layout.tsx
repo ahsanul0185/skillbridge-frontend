@@ -29,7 +29,7 @@ export default async function DashboardLayout({admin, student, tutor} : {childre
           </div>
           {/* <ModeToggle /> */}
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 container mx-auto max-w-6xl">
+        <div className="flex flex-1 flex-col gap-4 p-6 container mx-auto max-w-6xl">
           {(data?.user?.role === Roles.admin) ? admin : (data?.user?.role === Roles.student) ? student : (data?.user?.role === Roles.tutor) ? tutor : null}
         </div>
       </SidebarInset>
