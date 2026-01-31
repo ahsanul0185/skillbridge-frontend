@@ -51,8 +51,6 @@ export const userService = {
     },
     updateProfile : async function (updatedData : Partial<User>) {
         try {
-
-            console.log("-------data from service-------", updatedData)
         
             const cookieStore = await cookies();
 

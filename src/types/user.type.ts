@@ -1,4 +1,4 @@
-import { Category, UserRoles, UserStatus } from "."
+import { Category, Subject, UserRoles, UserStatus } from "."
 
 export interface User {
   id: string
@@ -50,17 +50,37 @@ export interface Availability {
 export interface TutorProfile {
   id: string;
   userId: string;
-  bio: string;
+  bio: string | null;
   hourlyRate: number;
-  categoryId: string;
+  categoryId: string | null;
   isFeatured: boolean;
   avgRating: string;
   totalReviews: number;
   createdAt: string;
-  user: User;
-  availability: Availability[];
-  category : Category;
+  user ?: User;
+  availability ?: Availability[];
+  category ?: Category;
   _count: {
     reviews: number;
   };
+}
+
+interface tutorSubject {
+  subjectId : string;
+  tutorId : string;
+  subject : Subject;
+}
+
+export interface TutorProfileDashboard {
+  id: string;
+  userId: string;
+  bio: string | null;
+  hourlyRate: number;
+  categoryId: string | null;
+  isFeatured: boolean;
+  avgRating: string;
+  totalReviews: number;
+  createdAt: string;
+  category ?: Category;
+  subjects : tutorSubject[];
 }

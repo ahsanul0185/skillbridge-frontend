@@ -21,7 +21,7 @@ import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, UserProfileFormProps } from "@/types";
+import { TutorProfileDashboard, User, UserProfileFormProps } from "@/types";
 import { userService } from "@/services/user.service";
 import { updateProfileAction } from "@/actions/user.action";
 
@@ -31,7 +31,10 @@ const profileSchema = z.object({
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
 });
 
-export function UserProfileForm({user}:  {user : Partial<User>}) {
+export function UserProfileForm({user, tutor}:  {user : Partial<User>, tutor : TutorProfileDashboard}) {
+
+    const {avgRating, isFeatured, totalReviews} = tutor;
+
   const form = useForm({
     defaultValues: {
       name: user.name || "",
@@ -78,6 +81,7 @@ export function UserProfileForm({user}:  {user : Partial<User>}) {
             </AvatarFallback>
           </Avatar>
           <div>
+            <h2 className="text-lg font-medium">{user.name}</h2>
             <p className="text-sm font-medium">{user.email}</p>
             <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary uppercase">
               {user.role}

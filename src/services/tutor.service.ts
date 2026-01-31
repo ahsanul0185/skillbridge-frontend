@@ -1,5 +1,6 @@
 import { env } from "@/env";
-import { TutorFilterParams } from "@/types";
+import { TutorFilterParams, TutorProfileDashboard } from "@/types";
+import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
 
@@ -45,9 +46,8 @@ export const tutorService = {
       };
     }
   },
-  getTutorById: async (tutorId : string) => {
+  getTutorById: async (tutorId: string) => {
     try {
-      
       const res = await fetch(`${API_URL}/api/tutors/${tutorId}`);
 
       const data = await res.json();
@@ -58,6 +58,53 @@ export const tutorService = {
         data: null,
         error: { message: error?.message || "Something went wrong" },
       };
+    }
+  },
+  updateTutorData: async function (
+    updatedData: Partial<TutorProfileDashboard>,
+    subjectIds: string[],
+  ) {
+    try {
+
+      console.log(subjectIds)
+
+      const cookieStore = await cookies();
+
+      const tutorRes = await fetch(`${API_URL}/api/tutors/update`, {
+        method: "PUT",
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      const tutorData = await tutorRes.json();
+
+      if (!tutorData.success) {
+        return { data: tutorData, error: tutorData.message };
+      }
+
+      const subjectRes = await fetch(`${API_URL}/api/tutors/subjects`, {
+        method: "PUT",
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({subjectIds}),
+      });
+
+      const subjectData = await subjectRes.json();
+
+      if (!subjectData.success) {
+        return {data : subjectData, error : subjectData.message}
+      }
+
+
+      return { data: tutorData, error: null };
+    } catch (error) {
+      console.log(error);
+      return { data: null, error: { message: "Something went wrong" } };
     }
   },
 };

@@ -22,8 +22,6 @@ export default function PaginationControls({meta} : PaginationControlsProps) {
 
     const {limit, page, total, totalPages} = meta;
 
-    console.log(meta)
-
     const searchParams = useSearchParams();
     const router = useRouter();
     
