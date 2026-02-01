@@ -1,3 +1,4 @@
+import DashPageHeader from '@/components/layout/DashPageHeader';
 import { AvailabilityCard } from '@/components/modules/tutor/availability/AvailabilityCard';
 import { CreateAvailabilityDialog } from '@/components/modules/tutor/availability/CreateAvailabilityDialog';
 import { availabilityService } from '@/services/availability.service';
@@ -10,13 +11,7 @@ export default async function TutorAvailability() {
     <div className="container mx-auto">
       {/* Page header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Tutor Availability
-        </h1>
-        <p className="text-muted-foreground mt-2">
-          Manage your availability schedule
-        </p>
-
+              <DashPageHeader title='Tutor Availability' description='Manage your availability schedule' className='mb-0'/>
         <div className='mt-5 md:mt-0 flex justify-end'>
            <CreateAvailabilityDialog />
         </div>

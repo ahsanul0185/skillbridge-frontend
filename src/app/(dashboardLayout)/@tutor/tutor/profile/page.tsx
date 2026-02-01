@@ -1,3 +1,4 @@
+import DashPageHeader from '@/components/layout/DashPageHeader';
 import { TutorProfileForm } from '@/components/modules/tutor/profile/TutorProfileForm';
 import { UserProfileForm } from '@/components/modules/user/profile/UserProfileForm';
 import { categoryService } from '@/services/category.service';
@@ -13,10 +14,7 @@ export default async function TutorProfile() {
 
   return (
     <div>
-      <div className='mb-8'>
-        <h1 className="text-3xl font-bold tracking-tight mb-2 ">Account Settings</h1>
-        <p className="text-muted-foreground">Manage your account and profile preferences.</p>
-      </div>
+      <DashPageHeader title='Account Settings' description='Manage your account and profile preferences.'/>
 
       <div className="flex flex-col gap-10">
         {/* User Base Data Form */}

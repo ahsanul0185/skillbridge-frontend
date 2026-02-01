@@ -7,3 +7,5 @@ export const DAYS = [
   "SATURDAY",
   "SUNDAY",
 ];
+
+export const BOOKING_STATUSES = ["COMPLETED", "PENDING", "CANCELLED"];

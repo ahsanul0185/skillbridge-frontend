@@ -109,8 +109,6 @@ export const availabilityService = {
 
       const data = await res.json();
 
-      console.log({data});
-
       if (!data.success) {
         return { data: data, error: data.message };
       }

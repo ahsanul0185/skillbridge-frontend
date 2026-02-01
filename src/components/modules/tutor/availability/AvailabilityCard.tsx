@@ -15,7 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Clock, Calendar, Edit2, Check, X } from "lucide-react";
 import { availabilityService } from "@/services/availability.service";
-import { Availability, AvailabilityCardProps, AvailabilityData } from "@/types";
+import { Availability, AvailabilityCardProps, AvailabilityData, AvailabilityStatus } from "@/types";
 import { toast } from "sonner";
 import { deleteAvailabilityAction, updateAvailabilityAction } from "@/actions/tutor.action";
 import {
@@ -115,6 +115,7 @@ export function AvailabilityCard({ availability }: AvailabilityCardProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsEditing(true)}
+                disabled={availability.status === AvailabilityStatus.BOOKED}
                 className="h-8 w-8"
               >
                 <Edit2 className="h-4 w-4" />
@@ -125,7 +126,7 @@ export function AvailabilityCard({ availability }: AvailabilityCardProps) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => ""}
+                      disabled={availability.status === AvailabilityStatus.BOOKED}
                       className="h-8 w-8 hover:bg-red-600/10"
                     >
                       <X className="h-4 w-4" />

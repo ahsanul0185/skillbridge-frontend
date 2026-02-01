@@ -11,3 +11,8 @@ export interface AvailabilityData {
 export interface AvailabilityCardProps {
   availability: AvailabilityData;
 }
+
+export enum AvailabilityStatus {
+  BOOKED = "BOOKED",
+  AVAILABLE = "AVAILABLE"
+}

@@ -66,7 +66,7 @@ interface NavbarProps {
 const Navbar = ({
   logo = {
     url: "/",
-    src: "./skillbridge.svg",
+    src: "/skillbridge.svg",
     alt: "logo",
     title: "SkillBridge",
   },

@@ -1,6 +1,9 @@
+
+
 export type * from "./routes.type"
 export type * from "./user.type"
-export type * from "./availability.type"
+export * from "./availability.type"
+export * from "./booking.type"
 
 
 export interface Subject {
@@ -28,3 +31,4 @@ export enum UserStatus {
     ACTIVE,
     BANNED
 }
+
