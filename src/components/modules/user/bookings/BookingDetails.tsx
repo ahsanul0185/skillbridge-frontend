@@ -8,15 +8,19 @@ import {
   Mail,
   Phone,
   Star,
-  User,
+  User as UserIcon,
   BookOpen,
   DollarSign,
   CheckCircle,
   Timer,
+  PencilLine,
 } from 'lucide-react';
-import { BookingDetail, BookingStatus } from '@/types';
+import { BookingDetail, BookingStatus, User, UserRoles } from '@/types';
 import { calcDuration, formatDateTime } from '@/lib/utils';
 import { StarRating } from '@/components/ui/start-rating';
+import { DetailRow } from './DetailRow';
+import { Button } from '@/components/ui/button';
+import LeaveReviewDialog from '../../student/review/LeaveReviewDialog';
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   CONFIRMED: 'secondary',
@@ -26,36 +30,13 @@ const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | '
 
 interface BookingDetailsPageProps {
   booking: BookingDetail;
+  user ?: User;
 }
 
-function DetailRow({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: React.ReactNode;
-}) {
-  return (
-    <div className="flex items-start gap-3">
-      <div className="mt-0.5 flex h-8 w-8 items-center justify-center bg-muted">
-        <Icon className="h-4 w-4 text-muted-foreground" />
-      </div>
-      <div className="flex min-w-0 flex-1 flex-col">
-        <span className="text-xs text-muted-foreground">{label}</span>
-        <span className="text-sm font-medium">{value}</span>
-      </div>
-    </div>
-  );
-}
-
-
-export default function BookingDetailsPage({ booking }: BookingDetailsPageProps) {
+export default function BookingDetailsPage({ booking, user }: BookingDetailsPageProps) {
 
   return (
     <div className="container mx-auto">
-      {/* ── Header ── */}
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Booking Details</h1>
@@ -100,12 +81,12 @@ export default function BookingDetailsPage({ booking }: BookingDetailsPageProps)
           <Card className="border-2">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center gap-2 text-base">
-                <User className="h-4 w-4 text-muted-foreground" />
+                <UserIcon className="h-4 w-4 text-muted-foreground" />
                 Student
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <DetailRow icon={User} label="Name" value={booking.student?.name ?? '—'} />
+              <DetailRow icon={UserIcon} label="Name" value={booking.student?.name ?? '—'} />
               <DetailRow icon={Mail} label="Email" value={booking.student?.email ?? '—'} />
               <DetailRow icon={Phone} label="Phone" value={booking.student?.phone ?? '—'} />
               <DetailRow
@@ -174,7 +155,14 @@ export default function BookingDetailsPage({ booking }: BookingDetailsPageProps)
                   </span>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No review has been submitted yet.</p>
+
+                user?.role === UserRoles.STUDENT ? (
+                  // <Button> <PencilLine/> Leave a review</Button>
+                  <LeaveReviewDialog bookingId={booking.id}/>
+                ) : (
+
+                  <p className="text-sm text-muted-foreground">No review has been submitted yet.</p>
+                )
               )}
             </CardContent>
           </Card>}

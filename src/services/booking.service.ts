@@ -37,7 +37,10 @@ export const bookingService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
-        cache: "no-store"
+        cache: "no-store",
+        next : {
+          tags : ["booking"]
+        }
       });
 
       const data = await res.json();
