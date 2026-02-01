@@ -10,7 +10,6 @@ export default async function TutorBookings() {
     <div className="">
       <DashPageHeader title='My Bookings' description='View and manage all your bookings'/>
 
-      {/* Table or empty state */}
       {data?.data?.length > 0 ? (
         <BookingsTable bookings={data.data as Booking[]} />
       ) : (

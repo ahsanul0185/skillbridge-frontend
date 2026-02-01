@@ -14,7 +14,7 @@ import {
   CheckCircle,
   Timer,
 } from 'lucide-react';
-import { BookingDetail } from '@/types';
+import { BookingDetail, BookingStatus } from '@/types';
 import { calcDuration, formatDateTime } from '@/lib/utils';
 import { StarRating } from '@/components/ui/start-rating';
 
@@ -154,7 +154,7 @@ export default function BookingDetailsPage({ booking }: BookingDetailsPageProps)
               />
             </CardContent>
           </Card>
-
+          {booking.status === BookingStatus.COMPLETED && 
           <Card className="border-2">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center gap-2 text-base">
@@ -177,7 +177,7 @@ export default function BookingDetailsPage({ booking }: BookingDetailsPageProps)
                 <p className="text-sm text-muted-foreground">No review has been submitted yet.</p>
               )}
             </CardContent>
-          </Card>
+          </Card>}
         </div>
 
         <div className="space-y-6">

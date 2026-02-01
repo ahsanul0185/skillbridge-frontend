@@ -57,15 +57,15 @@ export interface TutorProfile {
   avgRating: string;
   totalReviews: number;
   createdAt: string;
-  user ?: User;
-  availability ?: Availability[];
+  user : User;
+  availability : Availability[];
   category ?: Category;
   _count: {
     reviews: number;
   };
 }
 
-interface tutorSubject {
+interface TutorSubject {
   subjectId : string;
   tutorId : string;
   subject : Subject;
@@ -82,5 +82,5 @@ export interface TutorProfileDashboard {
   totalReviews: number;
   createdAt: string;
   category ?: Category;
-  subjects : tutorSubject[];
+  subjects : TutorSubject[];
 }

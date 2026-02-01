@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Star, Clock, DollarSign, BookOpen, Calendar, User, Mail, Award } from 'lucide-react';
+import CreateBookingDialog from '@/components/modules/student/bookings/CreateBookingDialog';
+import Link from 'next/link';
 
 export default async function TutorDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -68,13 +70,9 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
                       </CardDescription>
                     </div>
 
-                    {/* {tutor.isFeatured && (
-                      <Badge variant="default" className="bg-primary">
-                        <Award className="h-3 w-3 mr-1" />
-                        Featured Tutor
-                      </Badge>
-                    )} */}
-                    <Button className="bg-primary hover:bg-primary/90">Book a Session</Button>
+                    <Button asChild className="bg-primary hover:bg-primary/90">
+                      <Link href={`/tutors/${id}?book=true`} replace>Book a Session</Link>
+                    </Button>
 
                   </div>
                   <div className="flex flex-wrap gap-2 mt-4">
@@ -238,6 +236,7 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
           </CardContent>
         </Card>
       </div>
+      <CreateBookingDialog tutor={tutor} />
     </div>
   );
 }

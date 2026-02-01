@@ -12,6 +12,7 @@ export interface Booking {
   availability : Availability;
   studentId: string;
   tutorId: string;
+  tutor ?: TutorProfile
 };
 
 

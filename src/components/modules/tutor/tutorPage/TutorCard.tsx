@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TutorProfile } from "@/types";
 import Link from "next/link";
+import CreateBookingDialog from "../../student/bookings/CreateBookingDialog";
 // Import the interface we created earlier
 
 interface TutorCardProps {
@@ -56,12 +57,10 @@ export default function TutorCard({ tutor }: TutorCardProps) {
           </span>
         </div>
 
-        {/* Bio */}
         <p className="text-sm line-clamp-2 text-gray-600 italic">
           "{tutor.bio}"
         </p>
 
-        {/* Availability Badges */}
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase text-gray-400">Availability</p>
           <div className="flex flex-wrap gap-2">
@@ -85,8 +84,10 @@ export default function TutorCard({ tutor }: TutorCardProps) {
           </Link>
         </Button>
         
-        <Button className="font-semibold w-[47.5%]" variant="default">
-          Book a Lesson
+        <Button className="font-semibold w-[47.5%]" variant="default" asChild>
+          <Link href={`/tutors/${tutor.id}?book=true`}>
+            Book a Session
+          </Link>
         </Button>
       </CardFooter>
     </Card>
