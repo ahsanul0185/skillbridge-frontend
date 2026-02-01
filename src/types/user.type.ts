@@ -24,6 +24,19 @@ export interface UserProfileFormProps {
 }
 
 
+export interface ServiceOptions {
+  cache?: RequestCache;
+  revalidate?: number;
+}
+
+export interface ListUserPaginationProps {
+    limit?: number;
+    page?: number;
+    total?: number;
+    totalPages?: number;
+}
+
+
 export interface TutorFilterParams {
   search?: string | null;
   hourlyRate?: number | null;

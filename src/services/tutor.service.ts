@@ -1,13 +1,9 @@
 import { env } from "@/env";
-import { TutorFilterParams, TutorProfileDashboard } from "@/types";
+import { ServiceOptions, TutorFilterParams, TutorProfileDashboard } from "@/types";
 import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
 
-interface ServiceOptions {
-  cache?: RequestCache;
-  revalidate?: number;
-}
 
 export const tutorService = {
   getAllTutors: async (params: TutorFilterParams, options?: ServiceOptions) => {

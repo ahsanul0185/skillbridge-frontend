@@ -30,8 +30,8 @@ export enum UserRoles {
 }
 
 export enum UserStatus {
-    ACTIVE,
-    BANNED
+    ACTIVE = "ACTIVE",
+    BANNED = "BANNED"
 }
 
 
