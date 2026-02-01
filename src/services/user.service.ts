@@ -71,4 +71,22 @@ export const userService = {
             return {data : null, error : {message : "Something went wrong"}}
         }
     },
+    getStudentStats : async function () {
+        try {
+            const cookieStore = await cookies();
+
+            const res = await fetch(`${API_URL}/api/user/student/stats`, {
+                headers : {
+                    Cookie : cookieStore.toString()
+                },
+                cache : "no-store"
+            });
+            const data = await res.json()
+
+        return {data, error : null}
+        } catch (error) {
+            console.log(error)
+            return {data : null, error : {message : "Something went wrong"}}
+        }
+    },
 }

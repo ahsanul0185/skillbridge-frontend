@@ -27,11 +27,13 @@ import { userService } from "@/services/user.service";
 
 export default async function TutorDashboardOverview() {
 
-  const {data} = await tutorService.getTutorOverview()
-  const { profile, stats, upcomingBookings, recentReviews, availability } : TutorOverviewData = data.data;
+  const [tutorRes, userRes] = await Promise.all([
+      tutorService.getTutorOverview(),
+      userService.getSession()
+    ]);
 
-  const {data : userRes} = await userService.getSession();
-  const userData = userRes.user;
+  const { profile, stats, upcomingBookings, recentReviews, availability } : TutorOverviewData = tutorRes.data.data;
+  const userData = userRes.data.user;
 
   const completionRate = stats.totalBookings > 0 ? Math.round((stats.completedBookings / stats.totalBookings) * 100) : 0;
 
@@ -79,7 +81,6 @@ export default async function TutorDashboardOverview() {
                   </div>
                 </div>
               </div>
-              {/* rating pill */}
               <div className="flex items-center gap-2 bg-muted rounded-lg px-3 py-1.5">
                 <Star className="w-4 h-4 fill-amber-400 stroke-amber-400" />
                 <span className="text-sm font-semibold">
@@ -200,7 +201,6 @@ export default async function TutorDashboardOverview() {
             </CardContent>
           </Card>
 
-          {/* Recent Reviews */}
           <Card className="flex flex-col">
             <CardHeader className="pb-3 pt-5 px-5">
               <div className="flex items-center justify-between">
