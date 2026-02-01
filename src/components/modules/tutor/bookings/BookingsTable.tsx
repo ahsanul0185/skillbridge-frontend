@@ -157,13 +157,10 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
   </DialogContent>
 </Dialog>
 
-
                 : 
                 <Badge variant={STATUS_VARIANT[booking.status]}>
                   {booking.status}
                 </Badge>}    
-
-                
 
               </TableCell>
 

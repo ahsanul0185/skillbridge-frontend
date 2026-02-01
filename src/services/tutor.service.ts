@@ -104,5 +104,29 @@ export const tutorService = {
       console.log(error);
       return { data: null, error: { message: "Something went wrong" } };
     }
+  },
+  getTutorOverview: async function () {
+    try {
+
+      const cookieStore = await cookies();
+
+      const res = await fetch(`${API_URL}/api/tutors/overview`, {
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json",
+        }
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        return { data, error: data.message };
+      }
+
+      return { data, error: null };
+    } catch (error) {
+      console.log(error);
+      return { data: null, error: { message: "Something went wrong" } };
+    }
   }
 };

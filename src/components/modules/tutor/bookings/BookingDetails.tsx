@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { BookingDetail } from '@/types';
 import { calcDuration, formatDateTime } from '@/lib/utils';
+import { StarRating } from '@/components/ui/start-rating';
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   CONFIRMED: 'default',
@@ -50,25 +51,6 @@ function DetailRow({
   );
 }
 
-
-function StarRating({ rating }: { rating: number }) {
-  const full = Math.floor(rating);
-  const hasHalf = rating - full >= 0.5;
-  const empty = 5 - full - (hasHalf ? 1 : 0);
-
-  return (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: full }).map((_, i) => (
-        <Star key={`full-${i}`} className="h-4 w-4 fill-current text-yellow-500" />
-      ))}
-      {hasHalf && <Star className="h-4 w-4 fill-current text-yellow-300" />}
-      {Array.from({ length: empty }).map((_, i) => (
-        <Star key={`empty-${i}`} className="h-4 w-4 text-muted-foreground" />
-      ))}
-      <span className="ml-1.5 text-sm font-semibold">{rating.toFixed(1)}</span>
-    </div>
-  );
-}
 
 export default function BookingDetailsPage({ booking }: BookingDetailsPageProps) {
 
