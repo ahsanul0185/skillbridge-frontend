@@ -7,8 +7,6 @@ export default async function BookingDetailsPage({params} : {params : Promise<{i
   const {id} = await params;
   const {data} = await bookingService.getBookingById(id);
 
-  console.log(data)
-
   return (
     <div>
       <BookingDetails booking={data.data}/>

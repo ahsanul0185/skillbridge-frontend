@@ -17,7 +17,6 @@ export default async function TutorsPage({
     categoryService.getAllCategories(),
   ]);
 
-  console.log(tutorsRes)
   const pagination = tutorsRes?.data?.pagination || {
     limit: 10,
     page: 1,

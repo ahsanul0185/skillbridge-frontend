@@ -21,8 +21,7 @@ import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { TutorProfileDashboard, User, UserProfileFormProps } from "@/types";
-import { userService } from "@/services/user.service";
+import { User } from "@/types";
 import { updateProfileAction } from "@/actions/user.action";
 
 const profileSchema = z.object({
@@ -47,8 +46,6 @@ export function UserProfileForm({user}:  {user : Partial<User>}) {
 
       try {
         const res = await updateProfileAction(value);
-
-        console.log(res);
 
         if (res?.error) {
           toast.error(res.error.message, { id: toastId });
@@ -80,7 +77,7 @@ export function UserProfileForm({user}:  {user : Partial<User>}) {
           </Avatar>
           <div>
             <h2 className="text-lg font-medium">{user.name}</h2>
-            <p className="text-sm font-medium">{user.email}</p>
+            <p className="text-sm">{user.email}</p>
             <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary uppercase">
               {user.role}
             </span>

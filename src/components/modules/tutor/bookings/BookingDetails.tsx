@@ -12,7 +12,6 @@ import {
   BookOpen,
   DollarSign,
   CheckCircle,
-  CalendarCheck,
   Timer,
 } from 'lucide-react';
 import { BookingDetail } from '@/types';
@@ -77,6 +76,10 @@ export default function BookingDetailsPage({ booking }: BookingDetailsPageProps)
             <div className="flex flex-col gap-0.5">
               <span className="text-xs text-muted-foreground">Hourly Rate</span>
               <span className="text-xl font-bold">${booking.tutor?.hourlyRate ?? '—'}/hr</span>
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-xs text-muted-foreground">Subject</span>
+              <span className="text-xl font-bold">{booking.subject?.name ?? '—'}</span>
             </div>
             <div className="flex flex-col gap-0.5">
               <span className="text-xs text-muted-foreground">Booked On</span>

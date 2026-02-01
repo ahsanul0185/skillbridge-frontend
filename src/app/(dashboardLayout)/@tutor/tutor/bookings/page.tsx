@@ -6,8 +6,6 @@ import { Booking } from '@/types';
 export default async function TutorBookings() {
   const { data } = await bookingService.getAllBookings();
 
-  console.log(data)
-
   return (
     <div className="">
       <DashPageHeader title='My Bookings' description='View and manage all your bookings'/>

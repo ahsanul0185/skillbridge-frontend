@@ -40,36 +40,10 @@ export function CreateAvailabilityDialog() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate form
     if (!formData.day || !formData.startTime || !formData.endTime) {
-      // You might want to show a toast notification here
       console.error('Please fill in all fields');
       return;
     }
-
-    // setIsLoading(true);
-    // try {
-    //   const result = await createAvailabilityAction(formData);
-      
-    //   if (result.error) {
-    //     console.error('Failed to create availability:', result.error);
-    //     // Show error toast
-    //   } else {
-    //     // Success - close dialog and reset form
-    //     setOpen(false);
-    //     setFormData({
-    //       day: '',
-    //       startTime: '',
-    //       endTime: '',
-    //     });
-    //     // Show success toast
-    //   }
-    // } catch (error) {
-    //   console.error('Error creating availability:', error);
-    // } finally {
-    //   setIsLoading(false);
-    // }
-
 
      setIsLoading(true);
         const toastId = toast.loading("Adding availability...");
@@ -91,8 +65,6 @@ export function CreateAvailabilityDialog() {
         } finally {
           setIsLoading(false);
         }
-
-
 
   };
 

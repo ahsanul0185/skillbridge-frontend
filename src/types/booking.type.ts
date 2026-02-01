@@ -1,3 +1,4 @@
+import { Subject } from ".";
 import { Availability, TutorProfile, TutorProfileDashboard, User } from "./user.type";
 
 export interface Booking {
@@ -19,6 +20,7 @@ export interface BookingDetail {
   studentId: string;
   tutorId: string;
   availabilityId: string | null;
+  subjectId: string | null;
   status: string;
   price: number;
   createdAt: string;
@@ -35,6 +37,7 @@ export interface BookingDetail {
     review: string;
     createdAt: string;
   } | null;
+  subject ?: Subject
 }
 
 export enum BookingStatus {

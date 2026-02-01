@@ -4,7 +4,6 @@ import { UserProfileForm } from '@/components/modules/user/profile/UserProfileFo
 import { categoryService } from '@/services/category.service';
 import { userService } from '@/services/user.service'
 import { User } from '@/types';
-import React from 'react'
 
 export default async function TutorProfile() {
 
@@ -17,12 +16,8 @@ export default async function TutorProfile() {
       <DashPageHeader title='Account Settings' description='Manage your account and profile preferences.'/>
 
       <div className="flex flex-col gap-10">
-        {/* User Base Data Form */}
         <UserProfileForm user={user} />
         <TutorProfileForm tutor={data.data.tutorProfile} categories={categoriesData.data}/>
-        
-        {/* You can drop your TutorProfile component here later */}
-        {/* <TutorProfileData tutorData={data.tutorProfile} /> */}
       </div>
     </div>
   )
