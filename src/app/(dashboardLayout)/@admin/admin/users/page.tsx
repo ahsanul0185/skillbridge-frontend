@@ -25,7 +25,7 @@ export default async function ListUsers({
 
   return (
     <div>
-      <DashPageHeader title="User Management" description="aa" />
+      <DashPageHeader title="User Management" description="Manage all registered users" />
       <UsersTable users={data.data.data} />
       <PaginationControls meta={pagination} />
     </div>

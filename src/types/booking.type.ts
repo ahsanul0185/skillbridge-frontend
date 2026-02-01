@@ -15,6 +15,20 @@ export interface Booking {
   tutor ?: TutorProfile
 };
 
+export interface AdminBooking {
+  availabilityId: string | null;
+  completedAt: string | null;
+  createdAt: string;
+  id: string;
+  price: number;
+  status: BookingStatus
+  student: User;
+  availability : Availability;
+  studentId: string;
+  tutorId: string;
+  tutor ?: TutorProfile
+};
+
 
 export interface BookingDetail {
   id: string;
