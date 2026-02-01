@@ -19,8 +19,8 @@ import { calcDuration, formatDateTime } from '@/lib/utils';
 import { StarRating } from '@/components/ui/start-rating';
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  CONFIRMED: 'default',
-  COMPLETED: 'secondary',
+  CONFIRMED: 'secondary',
+  COMPLETED: 'default',
   CANCELLED: 'destructive',
 };
 

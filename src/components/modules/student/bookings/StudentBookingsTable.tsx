@@ -9,13 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Badge } from '@/components/ui/badge';  
 import { Eye } from 'lucide-react';
 // import { updateBookingStatusAction } from '@/actions/booking.action';
 import { Booking, BookingStatus } from '@/types';
@@ -27,8 +21,8 @@ import { updateBookingStatusAction } from '@/actions/user.action';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  CONFIRMED: 'default',
-  COMPLETED: 'secondary',
+  CONFIRMED: 'secondary',
+  COMPLETED: 'default',
   CANCELLED: 'destructive',
 };
 
@@ -113,7 +107,7 @@ export function StudentBookingsTable({ bookings }: BookingsTableProps) {
                 { booking.status === BookingStatus.CONFIRMED && 
                 <Dialog>
                 <DialogTrigger asChild>
-                    <Button variant="destructive" className='text-xs px-2 h-6 py-0 cursor-pointer'>Cancel Session</Button>
+                    <Button variant="secondary" className='text-xs px-2 h-6 py-0 cursor-pointer text-red-600 hover:bg-red-100'>Cancel Session</Button>
                 </DialogTrigger>
 
                 <DialogContent className="sm:max-w-[425px]">

@@ -46,3 +46,9 @@ export enum BookingStatus {
   COMPLETED = "COMPLETED",
   CANCELLED = "CANCELLED"
 }
+
+export interface CreateBookingPayload {
+  tutorId : string; 
+  availabilityId : string;
+  subjectId : string;
+}

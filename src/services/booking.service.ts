@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { BookingStatus } from "@/types";
+import { BookingStatus, CreateBookingPayload } from "@/types";
 import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
@@ -61,6 +61,33 @@ export const bookingService = {
           "Content-Type": "application/json",
         },
         body : JSON.stringify({status})
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        return { data, error: data.message };
+      }
+
+      return { data, error: null };
+    } catch (error: any) {
+      return {
+        data: null,
+        error: { message: error?.message || "Something went wrong" },
+      };
+    }
+  },
+  createBooking : async (bookingData : CreateBookingPayload) => {
+    try {
+      const cookieStore = await cookies();
+
+      const res = await fetch(`${API_URL}/api/bookings/create/`, {
+        method : "POST",
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json",
+        },
+        body : JSON.stringify(bookingData)
       });
 
       const data = await res.json();

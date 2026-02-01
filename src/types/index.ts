@@ -4,6 +4,7 @@ export type * from "./routes.type"
 export type * from "./user.type"
 export * from "./availability.type"
 export * from "./booking.type"
+export * from "./tutor.type"
 
 
 export interface Subject {

@@ -8,6 +8,8 @@ import { Separator } from '@/components/ui/separator';
 import { Star, Clock, DollarSign, BookOpen, Calendar, User, Mail, Award } from 'lucide-react';
 import CreateBookingDialog from '@/components/modules/student/bookings/CreateBookingDialog';
 import Link from 'next/link';
+import { calcDuration, formatDay, formatTime, getInitials } from '@/lib/utils';
+import { AvailabilityStatus } from '@/types';
 
 export default async function TutorDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -15,25 +17,6 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
   const { data } = await tutorService.getTutorById(id);
   const tutor = data.data;
 
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase();
-  };
-
-  const formatDay = (day: string) => {
-    return day.charAt(0) + day.slice(1).toLowerCase();
-  };
-
-  const formatTime = (time: string) => {
-    const [hours, minutes] = time.split(':');
-    const hour = parseInt(hours);
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const formattedHour = hour % 12 || 12;
-    return `${formattedHour}:${minutes} ${ampm}`;
-  };
 
   if (!tutor) {
     return (
@@ -77,8 +60,8 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
                   </div>
                   <div className="flex flex-wrap gap-2 mt-4">
                     {tutor.isFeatured && (
-                      <Badge variant="default" className="bg-primary">
-                        <Award className="h-3 w-3 mr-1" />
+                      <Badge variant="default" className="text-orange-700 bg-orange-100 font-medium">
+                        <Award className="h-3 w-3 mr-1 fill-orange-500 text-orange-500" />
                         Featured Tutor
                       </Badge>
                     )}
@@ -131,7 +114,6 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
             </CardContent>
           </Card>
 
-          {/* Subjects Card */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -152,13 +134,10 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
                   </div>
                 ))}
               </div>
-              {/* <Separator className="my-4" /> */}
-              {/* <Button className="w-full bg-primary hover:bg-primary/90">Book a Session</Button> */}
             </CardContent>
           </Card>
         </div>
 
-        {/* Availability Section */}
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -167,24 +146,34 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
             </CardTitle>
             <CardDescription>Available time slots for booking</CardDescription>
           </CardHeader>
+
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {tutor.availability.map((slot: any) => (
-                <div
-                  key={slot.id}
-                  className="p-4 border border-border rounded-lg transition-colors"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold">{formatDay(slot.day)}</h4>
+              {tutor.availability.map((slot: any) => {
+                const isBooked = slot.status === AvailabilityStatus.BOOKED;
+                return (
+                  <div
+                    key={slot.id}
+                    className={`p-4 border rounded-lg transition-colors`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold">{formatDay(slot.day)}</h4>
+                      <Badge variant={isBooked ? 'secondary' : 'default'} >
+                        {isBooked ? 'Booked' : 'Available'}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Clock className="h-4 w-4" />
+                      <span>
+                        {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
+                      </span>
+                      <span className="text-muted-foreground/60">
+                        ({calcDuration(slot.startTime, slot.endTime)})
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>
-                      {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </CardContent>
         </Card>

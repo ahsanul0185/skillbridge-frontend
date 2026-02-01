@@ -28,8 +28,8 @@ import { updateBookingStatusAction } from '@/actions/user.action';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  CONFIRMED: 'default',
-  COMPLETED: 'secondary',
+  CONFIRMED: 'secondary',
+  COMPLETED: 'default',
   CANCELLED: 'destructive',
 };
 
@@ -101,16 +101,19 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
               </TableCell>
 
               <TableCell>
-                 
-                
-                { booking.status === BookingStatus.CONFIRMED ? 
+                <Badge variant={STATUS_VARIANT[booking.status]}>
+                  {booking.status}
+                </Badge>  
+              </TableCell>
 
-    <Dialog>
+              <TableCell className="text-right flex justify-center items-center gap-2">
+{booking.status === BookingStatus.CONFIRMED &&
+  <Dialog>
   <DialogTrigger asChild>
-    <Button variant="default" className='text-sm md:text-sm px-3 py-0'>Mark as Completed</Button>
+    <Button variant="default" className='text-xs px-2 h-7 cursor-pointer'>Mark as Completed</Button>
   </DialogTrigger>
 
-  <DialogContent className="sm:max-w-[425px]">
+  <DialogContent className="sm:max-w-106.25">
     <DialogHeader>
       <DialogTitle>Confirm Completion</DialogTitle>
       <DialogDescription>
@@ -155,16 +158,9 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
 
     </DialogFooter>
   </DialogContent>
-</Dialog>
+</Dialog>}
 
-                : 
-                <Badge variant={STATUS_VARIANT[booking.status]}>
-                  {booking.status}
-                </Badge>}    
 
-              </TableCell>
-
-              <TableCell className="text-right flex justify-center">
                 <Link
                 className='text-right flex justify-center text-xs items-center gap-1'
                   href={`/tutor/bookings/${booking.id}`}

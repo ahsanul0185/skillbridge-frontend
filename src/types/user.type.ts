@@ -65,7 +65,7 @@ export interface TutorProfile {
   };
 }
 
-interface TutorSubject {
+export interface TutorSubject {
   subjectId : string;
   tutorId : string;
   subject : Subject;
