@@ -3,10 +3,7 @@ import {
   User, 
   LayoutDashboard, 
   CalendarCheck, 
-  Users, 
-  Layers, 
   Clock, 
-  ShieldAlert,
   Settings,
   Star
 } from "lucide-react";
@@ -22,7 +19,7 @@ export const tutorRoutes: Route[] = [
       { title: "My Bookings", url: "/tutor/bookings", icon: CalendarCheck },
       { title: "Availability", url: "/tutor/availability", icon: Clock },
       { title: "My Profile", url: "/tutor/profile", icon: Settings },
-      { title: "Reviews", url: "/dashboard/reviews", icon: Star },
+      { title: "Reviews", url: "/tutor/reviews", icon: Star },
     ],
   },
 ];

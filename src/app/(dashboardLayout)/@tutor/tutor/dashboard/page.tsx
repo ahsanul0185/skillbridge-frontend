@@ -207,6 +207,12 @@ export default async function TutorDashboardOverview() {
                 <CardTitle className="text-base font-semibold">
                   Recent Reviews
                 </CardTitle>
+                <Link
+                href="/tutor/reviews"
+                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-0.5 transition-colors"
+              >
+                See All <ArrowRight className="w-3 h-3" />
+              </Link>
               </div>
             </CardHeader>
             <CardContent className="px-5 pb-5 flex-1 flex flex-col gap-3">
