@@ -32,7 +32,6 @@ export const userService = {
     },
     getProfile : async function () {
         try {
-        
             const cookieStore = await cookies();
 
             const res = await fetch(`${API_URL}/api/user/me`, {
