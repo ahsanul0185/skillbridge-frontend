@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import DashPageHeader from '@/components/layout/DashPageHeader'
 import { userService } from '@/services/user.service'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'

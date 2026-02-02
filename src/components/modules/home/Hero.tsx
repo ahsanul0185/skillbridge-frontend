@@ -28,7 +28,7 @@ const stats = [
 export async function Hero() {
 
     const {data : categoryData} = await categoryService.getAllCategories();
-    const popularCategories = categoryData.data.slice(0, 4);
+    const popularCategories = categoryData?.data?.slice(0,4) ?? [];
 
   return (
     <div className="relative">
@@ -60,7 +60,7 @@ export async function Hero() {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              {popularCategories.map((category : Category) => (
+              {popularCategories.length > 0 && popularCategories.map((category : Category) => (
                 <Link key={category.id} href={`/tutors?categoryId=${category.id}`}>
                   <Button
                     variant="outline"

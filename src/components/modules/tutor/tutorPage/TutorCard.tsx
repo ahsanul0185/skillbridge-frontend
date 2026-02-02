@@ -6,8 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TutorProfile, User } from "@/types";
 import Link from "next/link";
-import CreateBookingDialog from "../../student/bookings/CreateBookingDialog";
-// Import the interface we created earlier
+
 
 interface TutorCardProps {
   tutor: TutorProfile;

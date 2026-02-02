@@ -1,10 +1,10 @@
 export const dynamic = "force-dynamic";
+
 import { env } from "@/env";
 import {
   ListUserPaginationProps,
   ServiceOptions,
   User,
-  UserProfileFormProps,
   UserStatus,
 } from "@/types";
 import { cookies } from "next/headers";
@@ -22,9 +22,13 @@ export const userService = {
           Cookie: cookieStore.toString(),
         },
         cache: "no-store",
+        credentials : "include"
       });
 
       const session = await res.json();
+
+      console.log(AUTH_URL)
+      console.log(session)
 
       if (session === null) {
         return { data: null, error: { message: "Session in missing" } };

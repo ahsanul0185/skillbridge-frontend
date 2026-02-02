@@ -32,14 +32,15 @@ interface Tutor {
 export default async function FeaturedTutors() {
 
   const {data} = await tutorService.getAllTutors({isFeatured : true, limit : "3"});
-  const tutors : Tutor[] = data.data;
+  const tutors : Tutor[] = data?.data ?? [];
+
 
   return (
     <section className="container mx-auto px-8 py-16">
       <SectionHeader title="Meet Our Top Tutors" description="Learn from the best educators in their fields"/>
     
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {tutors.map((tutor) => {
+        {tutors.length > 0 && tutors.map((tutor) => {
           return (
             <Card
               key={tutor.id}

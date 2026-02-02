@@ -3,8 +3,16 @@ import "./src/env"
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["picsum.photos"],
-  }
+    formats: ["image/avif", "image/webp"]
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/api/auth/:path*",
+        destination: `${process.env.NEXT_PUBLIC_BACKEND}/api/auth/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

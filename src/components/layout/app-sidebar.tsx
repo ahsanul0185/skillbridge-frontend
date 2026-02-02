@@ -55,7 +55,7 @@ export function AppSidebar({user, ...props }: {user : User} & React.ComponentPro
 
   let routes : Route[] = [];
 
-  switch (user.role) {
+  switch (user?.role) {
     case Roles.admin :
       routes = adminRoutes;
       break;

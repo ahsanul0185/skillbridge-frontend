@@ -25,6 +25,9 @@ import {
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
 import { Category, User } from "@/types";
+import { userService } from "@/services/user.service";
+import { useEffect, useState } from "react";
+import { env } from "@/env";
 
 interface MenuItem {
   title: string;
@@ -117,10 +120,28 @@ const Navbar = ({
     signup: { title: "Sign up", url: "/register" },
     dashboard: { title: "Dashboard", url: "/dashboard" },
   },
-  user,
   className,
 }: NavbarProps) => {
 
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`${env.NEXT_PUBLIC_BACKEND}/api/auth/get-session`, 
+        {
+          credentials : "include"
+        }
+      )
+      const session = await res.json();
+
+      if (session === null) {
+        return { data: null, error: { message: "Session in missing" } };
+      }
+      setUser(session.data?.user ?? null);
+    })()
+    
+  }, []);
 
 
   return (

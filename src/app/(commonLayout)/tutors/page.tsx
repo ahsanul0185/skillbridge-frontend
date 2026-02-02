@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import FilterSidebar from "@/components/modules/tutor/tutorPage/FilterSidebar";
 import TutorCard from "@/components/modules/tutor/tutorPage/TutorCard";
 import PaginationControls from "@/components/ui/pagination-controls";
