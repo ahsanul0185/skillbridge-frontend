@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { EB_Garamond, Faustina, Geist, Geist_Mono, Lexend, Slabo_13px } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 
 import LoganFive from "next/font/local";
@@ -37,15 +36,8 @@ export default function RootLayout({
       <body
         className={`${loganFive.variable} ${ebGaramond.variable} ${lexend.className}  antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
           {children}
           <Toaster richColors/>
-        </ThemeProvider>
       </body>
     </html>
   );

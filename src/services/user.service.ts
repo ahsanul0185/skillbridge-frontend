@@ -21,14 +21,10 @@ export const userService = {
         headers: {
           Cookie: cookieStore.toString(),
         },
-        cache: "no-store",
-        credentials : "include"
+        cache: "no-store"
       });
 
       const session = await res.json();
-
-      console.log(AUTH_URL)
-      console.log(session)
 
       if (session === null) {
         return { data: null, error: { message: "Session in missing" } };

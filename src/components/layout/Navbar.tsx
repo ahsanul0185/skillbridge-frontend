@@ -120,28 +120,9 @@ const Navbar = ({
     signup: { title: "Sign up", url: "/register" },
     dashboard: { title: "Dashboard", url: "/dashboard" },
   },
+  user,
   className,
 }: NavbarProps) => {
-
-
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(`${env.NEXT_PUBLIC_BACKEND}/api/auth/get-session`, 
-        {
-          credentials : "include"
-        }
-      )
-      const session = await res.json();
-
-      if (session === null) {
-        return { data: null, error: { message: "Session in missing" } };
-      }
-      setUser(session.data?.user ?? null);
-    })()
-    
-  }, []);
 
 
   return (
@@ -170,7 +151,6 @@ const Navbar = ({
             </div>
           </div>
           <div className="flex gap-2">
-            <ModeToggle />
             {
               user ? 
               <Button asChild size="sm">
@@ -210,18 +190,6 @@ const Navbar = ({
                 </Button>
               </SheetTrigger>
               <SheetContent className="overflow-y-auto">
-                <SheetHeader>
-                  <SheetTitle>
-                    {/* <Link href={logo.url} className="flex items-center gap-2 w-8">
-                      <img
-                        src={logo.src}
-                        className="max-h-8 dark:invert"
-                        alt={logo.alt}
-                      />
-                    </Link> */}
-                    <ModeToggle />
-                  </SheetTitle>
-                </SheetHeader>
                 <div className="flex flex-col gap-6 p-4">
                   <Accordion
                     type="single"

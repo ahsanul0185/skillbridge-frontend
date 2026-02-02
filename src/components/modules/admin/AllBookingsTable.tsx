@@ -17,7 +17,6 @@ export default function AllBookingsTable({bookings} : {bookings : AdminBooking[]
   return (
     <div className="border-2">
       <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow className='bg-secondary'>
           <TableHead className='w-12'>Booking ID</TableHead>
