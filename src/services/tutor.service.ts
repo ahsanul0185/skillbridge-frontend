@@ -61,8 +61,6 @@ export const tutorService = {
     subjectIds: string[],
   ) {
     try {
-      console.log(subjectIds);
-
       const cookieStore = await cookies();
 
       const tutorRes = await fetch(`${API_URL}/api/tutors/update`, {
@@ -118,6 +116,27 @@ export const tutorService = {
       if (!data.success) {
         return { data, error: data.message };
       }
+
+      return { data, error: null };
+    } catch (error) {
+      console.log(error);
+      return { data: null, error: { message: "Something went wrong" } };
+    }
+  },
+  updateFeaturedTutor: async function (isFeatured: boolean, tutorId: string) {
+    try {
+      const cookieStore = await cookies();
+
+      const res = await fetch(`${API_URL}/api/tutors/feature/${tutorId}`, {
+        method: "PUT",
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isFeatured }),
+      });
+      
+     const data = await res.json();
 
       return { data, error: null };
     } catch (error) {

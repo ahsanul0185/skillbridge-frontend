@@ -1,6 +1,7 @@
 "use server"
 
 import { categoryService } from "@/services/category.service";
+import { tutorService } from "@/services/tutor.service";
 import { Category, Subject } from "@/types";
 import { revalidatePath, updateTag } from "next/cache";
 
@@ -36,5 +37,11 @@ export const updateSubjectAction = async (subjectData : Partial<Subject>, subjec
 export const deleteSubjectAction = async (subjectId : string) => {
     const res = await categoryService.deleteSubject(subjectId);
     updateTag("categoriesData")
+    return res
+}
+
+export const updateFetureTutorAction = async (isFeatured : boolean, tutorId : string) => {
+    const res = await tutorService.updateFeaturedTutor(isFeatured, tutorId);
+    updateTag("tutorsList")
     return res
 }

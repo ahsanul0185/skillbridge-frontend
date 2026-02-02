@@ -53,7 +53,7 @@ export async function Hero() {
 
         <div className="absolute inset-0 bg-linear-to-r from-0% from-black/80 via-25% via-black/80 to-black/50 z-10" />
 
-        <div className="relative z-20 w-full container mx-auto px-4">
+        <div className="relative z-20 w-full container mx-auto px-8">
           <div className="max-w-2xl">
             <h1 className="text-white text-5xl lg:text-6xl leading-tight mb-10">
               Connect with Expert
@@ -69,7 +69,7 @@ export async function Hero() {
                 <Link key={category.id} href={`/tutors?categoryId=${category.id}`}>
                   <Button
                     variant="outline"
-                    className="bg-transparent border-white/40 text-white/90 hover:bg-white/10 hover:border-white/60 hover:text-white rounded-full px-7 cursor-pointer h-10 text-sm font-medium transition-all"
+                    className="bg-transparent border-white/40 text-white/90 hover:bg-white/10 hover:border-white/60 hover:text-white rounded-full px-7 cursor-pointer h-9 text-sm font-medium transition-all"
                   >
                     {category.name}
                     <ArrowRight className="ml-2 h-3.5 w-3.5" />
@@ -81,7 +81,7 @@ export async function Hero() {
         </div>
       </section>
 
-        <section className="container mx-auto px-4 py-12">
+        <section className="container mx-auto px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {stats.map((stat, index) => {
               const Icon = stat.icon;

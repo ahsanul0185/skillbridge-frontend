@@ -5,7 +5,7 @@
 
 @theme inline {
 
-  --container-padding: 2rem;
+  --container-padding: 4rem;
 
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;

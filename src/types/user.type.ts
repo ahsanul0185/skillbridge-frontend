@@ -47,6 +47,7 @@ export interface TutorFilterParams {
   subjectId?: string | null;
   page?: string;
   limit?: string;
+  sortBy?: string;
 }
 
 

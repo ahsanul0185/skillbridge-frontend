@@ -5,6 +5,7 @@ import {
   Layers, 
   ShieldAlert,
   ClipboardList,
+  Award,
 } from "lucide-react";
 
 export const adminRoutes: Route[] = [
@@ -17,6 +18,7 @@ export const adminRoutes: Route[] = [
       { title: "User Management", url: "/admin/users", icon: Users },
       { title: "All Bookings", url: "/admin/bookings", icon: ClipboardList },
       { title: "Category & Subjects", url: "/admin/categories", icon: Layers },
+      { title: "Featuerd Tutors", url: "/admin/featured", icon: Award },
     ],
   },
 ];
