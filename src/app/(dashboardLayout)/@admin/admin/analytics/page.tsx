@@ -1,21 +1,3 @@
-// import DashPageHeader from '@/components/layout/DashPageHeader';
-// import { userService } from '@/services/user.service'
-// import React from 'react'
-
-// export default async function AdminAnalytics() {
-
-//   const {data} = await userService.getAdminAnalytics();
-
-//   console.log(data)
-
-//   return (
-//     <div>
-//       <DashPageHeader title='' description=''/>
-//     </div>
-//   )
-// }
-
-
 import DashPageHeader from '@/components/layout/DashPageHeader';
 import { userService } from '@/services/user.service'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,8 +6,6 @@ import { Users, GraduationCap, UserCheck, BookOpen, CheckCircle, DollarSign, Sta
 export default async function AdminAnalytics() {
   const {data : resData} = await userService.getAdminAnalytics();
   const data = resData.data;
-
-  console.log(data)
 
   const statCards = [
     {

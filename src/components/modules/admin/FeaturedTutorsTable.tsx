@@ -18,11 +18,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { TutorProfile, User, UserStatus } from "@/types";
-import { formatDate, getInitials } from "@/lib/utils";
-import { USER_STATUS } from "@/constants";
+import { TutorProfile } from "@/types";
+import { getInitials } from "@/lib/utils";
 import { toast } from "sonner";
-import { updateUserStatusAction } from "@/actions/user.action";
 import Link from "next/link";
 import { Eye } from "lucide-react";
 import { updateFetureTutorAction } from "@/actions/admin.action";
