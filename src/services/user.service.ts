@@ -166,8 +166,7 @@ getAdminAnalytics: async function () {
         headers: {
           Cookie: cookieStore.toString(),
           "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status }),
+        }
       });
       const data = await res.json();
 
