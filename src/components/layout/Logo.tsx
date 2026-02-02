@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2 mb-1.5">
+    <Link href="/" className="flex items-center gap-2 mb-1.5 w-fit">
       <img
         src="/skillbridge.svg"
         className="max-h-6 dark:invert"

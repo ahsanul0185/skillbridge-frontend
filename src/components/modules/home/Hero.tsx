@@ -6,11 +6,6 @@ import { SearchBar } from "./Searchbar";
 import { categoryService } from "@/services/category.service";
 import { Category } from "@/types";
 
-// const popularCategories = [
-//   "Programming",
-//   "Language",
-//   "Science",
-// ];
 
 const stats = [
   {

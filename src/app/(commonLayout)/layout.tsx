@@ -1,3 +1,4 @@
+import Footer from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { menuItems } from "@/constants/menuItems";
 import { categoryService } from "@/services/category.service";
@@ -17,6 +18,7 @@ export default async function CommonLayout({children} : {children : React.ReactN
         <div className="">
           {children}
         </div>
+        <Footer />
     </div>
   )
 }

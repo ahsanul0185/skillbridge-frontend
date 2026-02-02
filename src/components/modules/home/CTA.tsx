@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function CTA() {
   return (
@@ -11,9 +12,9 @@ export default function CTA() {
           </span>
         </h2>
         
-        <Button className="mt-8 rounded-lg bg-white px-8 py-3 text-base font-medium text-gray-900 transition-all hover:bg-gray-100 hover:shadow-lg">
+        <Link href="/register" className="mt-8 inline-block bg-white px-8 py-3 text-base font-medium text-gray-900 transition-all hover:bg-gray-100 hover:shadow-lg">
           Start Learning
-        </Button>
+        </Link>
       </div>
     </div>
   );
