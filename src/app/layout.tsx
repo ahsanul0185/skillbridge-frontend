@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Faustina, Geist, Geist_Mono, Lexend, Slabo_13px } from "next/font/google";
+import { EB_Garamond, Faustina, Geist, Geist_Mono, Lexend, Slabo_13px } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -11,9 +11,9 @@ const loganFive = LoganFive({
     variable : "--font-logan"
 })
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const ebGaramond = EB_Garamond({
+  variable: "--font-eb-garamond",
+  // subsets: ["latin"],
 });
 
 const lexend = Lexend({
@@ -21,14 +21,6 @@ const lexend = Lexend({
   subsets : ["latin"]
 })
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const slabo = Slabo_13px({
-  weight : "400"
-})
 
 export const metadata: Metadata = {
   title: "SkillBridge",
@@ -43,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${loganFive.variable} ${lexend.className} antialiased`}
+        className={`${loganFive.variable} ${ebGaramond.variable} ${lexend.className}  antialiased`}
       >
         <ThemeProvider
           attribute="class"
