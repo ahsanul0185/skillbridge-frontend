@@ -157,4 +157,24 @@ export const userService = {
       return { data: null, error: { message: "Something went wrong" } };
     }
   },
+
+getAdminAnalytics: async function () {
+    try {
+      const cookieStore = await cookies();
+
+      const res = await fetch(`${API_URL}/api/user/admin/analytics`, {
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      });
+      const data = await res.json();
+
+      return { data, error: null };
+    } catch (error) {
+      console.log(error);
+      return { data: null, error: { message: "Something went wrong" } };
+    }
+  },
 };

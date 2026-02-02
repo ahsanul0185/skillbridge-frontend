@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -21,6 +19,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogTrigger,
+  DialogDescription,
+  DialogClose,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -33,12 +34,18 @@ import { Tabs, TabsContent, TabsTrigger, TabsList } from "@/components/ui/tabs";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { Category, Subject } from "@/types";
 import { toast } from "sonner";
-import { createCategoryAction, createSubjectAction, deleteCategoryAction, deleteSubjectAction, updateCategoryAction, updateSubjectAction } from "@/actions/admin.action";
+import {
+  createCategoryAction,
+  createSubjectAction,
+  deleteCategoryAction,
+  deleteSubjectAction,
+  updateCategoryAction,
+  updateSubjectAction,
+} from "@/actions/admin.action";
 
-
-export default function ManageCategories({data}: {data : Category[]}) {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [subjects, setSubjects] = useState<Subject[]>([]);
+export default function ManageCategories({ data }: { data: Category[] }) {
+  const categories = data;
+  const subjects = data.flatMap((cat: Category) => cat.subjects);
 
   const [catModalOpen, setCatModalOpen] = useState(false);
   const [catEditId, setCatEditId] = useState<string | null>(null);
@@ -51,15 +58,6 @@ export default function ManageCategories({data}: {data : Category[]}) {
 
   const [subName, setSubName] = useState("");
   const [subCategoryId, setSubCategoryId] = useState("");
-
-
-  useEffect(() => {
-    setCategories(data);
-    const allSubjects = data.flatMap((cat: Category) => cat.subjects);
-    setSubjects(allSubjects);
-  }, []);
-
-
 
   // For Category
   function openCategoryCreate() {
@@ -77,26 +75,27 @@ export default function ManageCategories({data}: {data : Category[]}) {
   }
 
   async function handleCategorySubmit() {
+    setCatModalOpen(false);
     if (catEditId) {
       // UPDATE
       const payload = { name: catName, description: catDescription };
-     const toastId = toast.loading("Updating category...");
+      const toastId = toast.loading("Updating category...");
 
       try {
         const res = await updateCategoryAction(payload, catEditId);
 
         if (res?.error) {
-            toast.error(res.error, { id: toastId });
-            return;
+          toast.error(res.error, { id: toastId });
+          return;
         }
 
         toast.success(res.data.message || "Category updated", {
-            id: toastId,
+          id: toastId,
         });
-        } catch (err) {
-            console.log(err);
-            toast.error("Failed to update categroy", { id: toastId });
-        }
+      } catch (err) {
+        console.log(err);
+        toast.error("Failed to update categroy", { id: toastId });
+      }
     } else {
       // CREATE
       const payload = { name: catName, description: catDescription };
@@ -106,43 +105,42 @@ export default function ManageCategories({data}: {data : Category[]}) {
         const res = await createCategoryAction(payload);
 
         if (res?.error) {
-            toast.error(res.error, { id: toastId });
-            return;
+          toast.error(res.error, { id: toastId });
+          return;
         }
 
         toast.success(res.data.message || "Category created", {
-            id: toastId,
+          id: toastId,
         });
-        } catch (err) {
-            console.log(err);
-            toast.error("Failed to create category", { id: toastId });
-        }
+      } catch (err) {
+        console.log(err);
+        toast.error("Failed to create category", { id: toastId });
+      }
     }
-    setCatModalOpen(false);
-  }
-
-  async function handleCategoryDelete(id: string) {
-   const toastId = toast.loading("Deleting category...");
-
-      try {
-        const res = await deleteCategoryAction(id);
-
-        if (res?.error) {
-            toast.error(res.error, { id: toastId });
-            return;
-        }
-
-        toast.success(res.data.message || "Category deleted", {
-            id: toastId,
-        });
-        } catch (err) {
-            console.log(err);
-            toast.error("Failed to delete category", { id: toastId });
-        }
     
   }
 
-// For Subject
+  async function handleCategoryDelete(id: string) {
+    const toastId = toast.loading("Deleting category...");
+
+    try {
+      const res = await deleteCategoryAction(id);
+
+      if (res?.error) {
+        toast.error(res.error, { id: toastId });
+        return;
+      }
+
+      toast.success(res.data.message || "Category deleted", {
+        id: toastId,
+      });
+    } catch (err) {
+      console.log(err);
+      toast.error("Failed to delete category", { id: toastId });
+    }
+  }
+
+  // For Subject
 
   function openSubjectCreate() {
     setSubEditId(null);
@@ -159,6 +157,7 @@ export default function ManageCategories({data}: {data : Category[]}) {
   }
 
   async function handleSubjectSubmit() {
+    setSubModalOpen(false);
     if (subEditId) {
       // UPDATE
       const payload = { name: subName, categoryId: subCategoryId };
@@ -168,18 +167,17 @@ export default function ManageCategories({data}: {data : Category[]}) {
         const res = await updateSubjectAction(payload, subEditId);
 
         if (res?.error) {
-            toast.error(res.error, { id: toastId });
-            return;
+          toast.error(res.error, { id: toastId });
+          return;
         }
 
         toast.success(res.data.message || "Subject updated", {
-            id: toastId,
+          id: toastId,
         });
-        } catch (err) {
-            console.log(err);
-            toast.error("Failed to update subject", { id: toastId });
-        } 
-
+      } catch (err) {
+        console.log(err);
+        toast.error("Failed to update subject", { id: toastId });
+      }
     } else {
       // CREATE
       const payload = { name: subName, categoryId: subCategoryId };
@@ -189,42 +187,40 @@ export default function ManageCategories({data}: {data : Category[]}) {
         const res = await createSubjectAction(payload);
 
         if (res?.error) {
-            toast.error(res.error, { id: toastId });
-            return;
+          toast.error(res.error, { id: toastId });
+          return;
         }
 
         toast.success(res.data.message || "Subject added", {
-            id: toastId,
+          id: toastId,
         });
-        } catch (err) {
-            console.log(err);
-            toast.error("Failed to create subject", { id: toastId });
-        }
+      } catch (err) {
+        console.log(err);
+        toast.error("Failed to create subject", { id: toastId });
+      }
     }
-    setSubModalOpen(false);
+    
   }
 
   async function handleSubjectDelete(id: string) {
     const toastId = toast.loading("Deleting subject...");
 
-      try {
-        const res = await deleteSubjectAction(id);
+    try {
+      const res = await deleteSubjectAction(id);
 
-        if (res?.error) {
-            toast.error(res.error, { id: toastId });
-            return;
-        }
+      if (res?.error) {
+        toast.error(res.error, { id: toastId });
+        return;
+      }
 
-        toast.success(res.data.message || "Subject deleted", {
-            id: toastId,
-        });
-        } catch (err) {
-            console.log(err);
-            toast.error("Failed to delete subject", { id: toastId });
-        }
+      toast.success(res.data.message || "Subject deleted", {
+        id: toastId,
+      });
+    } catch (err) {
+      console.log(err);
+      toast.error("Failed to delete subject", { id: toastId });
+    }
   }
-
-  // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
     <div>
@@ -251,7 +247,7 @@ export default function ManageCategories({data}: {data : Category[]}) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categories.map((category) => (
+              {data.map((category) => (
                 <TableRow key={category.id}>
                   <TableCell className="font-medium">{category.name}</TableCell>
                   <TableCell className="text-muted-foreground">
@@ -266,14 +262,45 @@ export default function ManageCategories({data}: {data : Category[]}) {
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-red-500 hover:text-red-700"
-                      onClick={() => handleCategoryDelete(category.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Delete Category</DialogTitle>
+                          <DialogDescription>
+                            Are you sure you want to delete{" "}
+                            <b>{category.name}</b>? This action is permanent.
+                          </DialogDescription>
+                        </DialogHeader>
+
+                        <DialogFooter className="flex flex-row justify-end gap-2">
+                          <DialogClose asChild>
+                            <Button type="button" variant="secondary">
+                              Cancel
+                            </Button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => handleCategoryDelete(category.id)}
+                          >
+                            Confirm Delete
+                          </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </TableCell>
                 </TableRow>
               ))}
@@ -301,7 +328,7 @@ export default function ManageCategories({data}: {data : Category[]}) {
                 <TableRow key={sub.id}>
                   <TableCell className="font-medium">{sub.name}</TableCell>
                   <TableCell className="text-muted-foreground">
-                    {categories.find((c) => c.id === sub.categoryId)?.name || "—"}
+                    {data.find((c) => c.id === sub.categoryId)?.name || "—"}
                   </TableCell>
                   <TableCell className="text-right flex gap-2 justify-end">
                     <Button
@@ -311,14 +338,45 @@ export default function ManageCategories({data}: {data : Category[]}) {
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-red-500 hover:text-red-700"
-                      onClick={() => handleSubjectDelete(sub.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Delete Subject</DialogTitle>
+                          <DialogDescription>
+                            Are you sure you want to delete <b>{sub.name}</b>?
+                            This action is permanent.
+                          </DialogDescription>
+                        </DialogHeader>
+
+                        <DialogFooter className="flex flex-row justify-end gap-2">
+                          <DialogClose asChild>
+                            <Button type="button" variant="secondary">
+                              Cancel
+                            </Button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => handleSubjectDelete(sub.id)}
+                          >
+                            Confirm Delete
+                          </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </TableCell>
                 </TableRow>
               ))}

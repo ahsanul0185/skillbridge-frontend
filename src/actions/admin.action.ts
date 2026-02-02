@@ -12,8 +12,7 @@ export const createCategoryAction = async (categoryData : Partial<Category>) => 
 
 export const updateCategoryAction = async (categoryData : Partial<Category>, categoryId : string) => {
     const res = await categoryService.updateCategory(categoryData, categoryId);
-    // updateTag("categoriesData")
-    revalidatePath("/admin/categories")
+    updateTag("categoriesData")
     return res
 }
 
