@@ -10,12 +10,18 @@ import CreateBookingDialog from '@/components/modules/student/bookings/CreateBoo
 import Link from 'next/link';
 import { calcDuration, formatDay, formatTime, getInitials } from '@/lib/utils';
 import { AvailabilityStatus } from '@/types';
+import { userService } from '@/services/user.service';
 
 export default async function TutorDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const { data } = await tutorService.getTutorById(id);
-  const tutor = data.data;
+  const [tutorRes, userRes] = await Promise.all([
+    tutorService.getTutorById(id),
+    userService.getSession()
+  ])
+
+  const tutor = tutorRes.data.data;
+  const user = userRes.data?.user;
 
 
   if (!tutor) {
@@ -54,7 +60,7 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
                     </div>
 
                     <Button asChild className="bg-primary hover:bg-primary/90">
-                      <Link href={`/tutors/${id}?book=true`} replace>Book a Session</Link>
+                      <Link href={user ? `/tutors/${tutor.id}?book=true` : "/login"} replace>Book a Session</Link>
                     </Button>
 
                   </div>

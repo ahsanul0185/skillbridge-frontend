@@ -1,19 +1,20 @@
-import React from "react";
+
 import { Star, Clock, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TutorProfile } from "@/types";
+import { TutorProfile, User } from "@/types";
 import Link from "next/link";
 import CreateBookingDialog from "../../student/bookings/CreateBookingDialog";
 // Import the interface we created earlier
 
 interface TutorCardProps {
   tutor: TutorProfile;
+  user ?: User
 }
 
-export default function TutorCard({ tutor }: TutorCardProps) {
+export default function TutorCard({ tutor, user }: TutorCardProps) {
 
   return (
     <Card className="w-full overflow-hidden transition-all hover:shadow-lg">
@@ -85,7 +86,7 @@ export default function TutorCard({ tutor }: TutorCardProps) {
         </Button>
         
         <Button className="font-semibold w-[47.5%]" variant="default" asChild>
-          <Link href={`/tutors/${tutor.id}?book=true`}>
+          <Link href={user ? `/tutors/${tutor.id}?book=true` : "/login"}>
             Book a Session
           </Link>
         </Button>

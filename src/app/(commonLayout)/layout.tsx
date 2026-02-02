@@ -14,7 +14,7 @@ export default async function CommonLayout({children} : {children : React.ReactN
   return (
     <div>
         <Navbar user={data?.user as User} menu={menu} className="sticky left-0 top-0"/>
-        <div className="container mx-auto px-4">
+        <div className="">
           {children}
         </div>
     </div>

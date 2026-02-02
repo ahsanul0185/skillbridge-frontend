@@ -3,6 +3,7 @@ import TutorCard from "@/components/modules/tutor/tutorPage/TutorCard";
 import PaginationControls from "@/components/ui/pagination-controls";
 import { categoryService } from "@/services/category.service";
 import { tutorService } from "@/services/tutor.service";
+import { userService } from "@/services/user.service";
 import { TutorFilterParams, TutorProfile } from "@/types";
 
 export default async function TutorsPage({
@@ -12,9 +13,10 @@ export default async function TutorsPage({
 }) {
   const filters = await searchParams;
 
-  const [tutorsRes, categoriesRes] = await Promise.all([
+  const [tutorsRes, categoriesRes, userRes] = await Promise.all([
     tutorService.getAllTutors({ ...filters }, {cache : "no-store"}),
     categoryService.getAllCategories(),
+    userService.getSession(),
   ]);
 
   const pagination = tutorsRes?.data?.pagination || {
@@ -25,7 +27,7 @@ export default async function TutorsPage({
   };
 
   return (
-    <div className="container mx-auto py-8 ">
+    <div className="mx-auto py-8">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Left Sidebar */}
         <div className="flex-shrink-0">
@@ -45,7 +47,7 @@ export default async function TutorsPage({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {tutorsRes?.data?.data?.map((tutor: TutorProfile) => (
-              <TutorCard key={tutor.id} tutor={tutor} />
+              <TutorCard key={tutor.id} tutor={tutor} user={userRes.data?.user}/>
             ))}
 
             {tutorsRes?.data?.data?.length === 0 && (
