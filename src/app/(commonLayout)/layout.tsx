@@ -10,7 +10,7 @@ export default async function CommonLayout({children} : {children : React.ReactN
   const {data} = await userService.getSession();
   const {data : categoryData} = await categoryService.getAllCategories();
 
-  const menu = [...menuItems, {title : "Categories", url : "#", items : categoryData.data}]
+  const menu = [...menuItems, {title : "Categories", url : "#", items : categoryData?.data}]
 
   return (
     <div>
