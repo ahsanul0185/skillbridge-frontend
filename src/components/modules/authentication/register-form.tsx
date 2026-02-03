@@ -55,7 +55,7 @@ export function RegisterForm({
     onSubmit: async ({ value }) => {
       const toastId = toast.loading("Creating user");
       try {
-        const { data, error } = await authClient.signUp.email({...value, callbackURL: `${env.NEXT_PUBLIC_FRONTEND_URL}/dashboard`,});
+        const { data, error } = await authClient.signUp.email({...value});
 
         if (error) {
           toast.error(error.message, { id: toastId });
@@ -63,7 +63,7 @@ export function RegisterForm({
         }
 
         if (data.user) {
-          router.push(`/verify-request?email=${value.email}`);
+          router.push(`/login`);
         toast.success("User created successfully", { id: toastId });
         
 
