@@ -11,7 +11,7 @@ import {
 import { Roles } from "@/constants/roles";
 import { userService } from "@/services/user.service"
 
-export default async function DashboardLayout({admin, student, tutor} : {children : React.ReactNode, admin : React.ReactNode, student : React.ReactNode, tutor : React.ReactNode}) {
+export default async function DashboardLayout({admin, student, tutor, institute, mentor, moderator} : {children : React.ReactNode, admin : React.ReactNode, student : React.ReactNode, tutor : React.ReactNode, institute: React.ReactNode, mentor: React.ReactNode, moderator: React.ReactNode}) {
 
   const data = await userService.getSession();
 
@@ -30,7 +30,12 @@ export default async function DashboardLayout({admin, student, tutor} : {childre
           {/* <ModeToggle /> */}
         </header>
         <div className="flex flex-1 flex-col gap-4 p-6 container mx-auto max-w-6xl">
-          {(data?.data?.user?.role === Roles.admin) ? admin : (data?.data?.user?.role === Roles.student) ? student : (data?.data?.user?.role === Roles.tutor) ? tutor : null}
+          {(data?.data?.user?.role === Roles.admin) ? admin : 
+           (data?.data?.user?.role === Roles.student) ? student : 
+           (data?.data?.user?.role === Roles.tutor) ? tutor : 
+           (data?.data?.user?.role === Roles.institute) ? institute :
+           (data?.data?.user?.role === Roles.mentor) ? mentor :
+           (data?.data?.user?.role === Roles.moderator) ? moderator : null}
         </div>
       </SidebarInset>
     </SidebarProvider>
