@@ -17,6 +17,9 @@ import Link from "next/link"
 import { adminRoutes } from "@/routes/adminRoutes"
 import { studentRoutes } from "@/routes/studentRoutes"
 import { tutorRoutes } from "@/routes/tutorRoutes"
+import { instituteRoutes } from "@/routes/instituteRoutes"
+import { mentorRoutes } from "@/routes/mentorRoutes"
+import { moderatorRoutes } from "@/routes/moderatorRoutes"
 import { NavUser } from "@/components/ui/nav-user"
 import { Route, User, UserRoles } from "@/types"
 import Image from "next/image"
@@ -64,6 +67,15 @@ export function AppSidebar({user, ...props }: {user : User} & React.ComponentPro
       break;
     case Roles.tutor:
       routes = tutorRoutes;
+      break;
+    case Roles.institute:
+      routes = instituteRoutes;
+      break;
+    case Roles.mentor:
+      routes = mentorRoutes;
+      break;
+    case Roles.moderator:
+      routes = moderatorRoutes;
       break;
     default:
       routes = [];

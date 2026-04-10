@@ -185,6 +185,7 @@ export function RegisterForm({
                     <SelectGroup>
                       <SelectItem value="STUDENT">Student</SelectItem>
                       <SelectItem value="TUTOR">Tutor</SelectItem>
+                      <SelectItem value="INSTITUTE">Institute</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

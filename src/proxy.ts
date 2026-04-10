@@ -2,8 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { Roles } from "@/constants/roles";
 import { userService } from "@/services/user.service";
 
-export async function proxy (request : NextRequest) {
+/** Returns the home dashboard URL for a given role */
+function getDashboardUrl(role: string): string {
+  switch (role) {
+    case Roles.admin:      return "/admin/analytics";
+    case Roles.tutor:      return "/tutor/dashboard";
+    case Roles.institute:  return "/institute/dashboard";
+    case Roles.mentor:     return "/mentor/dashboard";
+    case Roles.moderator:  return "/moderator/dashboard";
+    default:               return "/dashboard"; // student
+  }
+}
 
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   let isAuthenticated = false;
@@ -16,29 +27,51 @@ export async function proxy (request : NextRequest) {
     userRole = data.user.role;
   }
 
-  if (isAuthenticated && (pathname.startsWith("/login") || pathname.startsWith("/register"))) {
-    if (userRole === Roles.tutor) return NextResponse.redirect(new URL("/tutor/dashboard", request.url));
-    if (userRole === Roles.admin) return NextResponse.redirect(new URL("/admin", request.url));
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  // ── Redirect authenticated users away from auth pages ──────────────────────
+  if (
+    isAuthenticated &&
+    (pathname.startsWith("/login") || pathname.startsWith("/register"))
+  ) {
+    return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url));
   }
 
-  if (!isAuthenticated && (pathname.startsWith("/dashboard") || pathname.startsWith("/tutor") || pathname.startsWith("/admin"))) {
+  // ── Redirect unauthenticated users to login ─────────────────────────────────
+  const protectedPaths = [
+    "/dashboard",
+    "/tutor",
+    "/admin",
+    "/institute",
+    "/mentor",
+    "/moderator",
+  ];
+  if (!isAuthenticated && protectedPaths.some((p) => pathname.startsWith(p))) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
+  // ── Role-based route guards ─────────────────────────────────────────────────
+
   if (pathname.startsWith("/admin") && userRole !== Roles.admin) {
-    const redirectPath = userRole === Roles.tutor ? "/tutor/dashboard" : "/dashboard";
-    return NextResponse.redirect(new URL(redirectPath, request.url));
+    return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url));
   }
 
   if (pathname.startsWith("/tutor") && userRole !== Roles.tutor) {
-    const redirectPath = userRole === Roles.admin ? "/admin" : "/dashboard";
-    return NextResponse.redirect(new URL(redirectPath, request.url));
+    return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url));
+  }
+
+  if (pathname.startsWith("/institute") && userRole !== Roles.institute) {
+    return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url));
+  }
+
+  if (pathname.startsWith("/mentor") && userRole !== Roles.mentor) {
+    return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url));
+  }
+
+  if (pathname.startsWith("/moderator") && userRole !== Roles.moderator) {
+    return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url));
   }
 
   if (pathname.startsWith("/dashboard") && userRole !== Roles.student) {
-    const redirectPath = userRole === Roles.admin ? "/admin" : "/tutor/dashboard";
-    return NextResponse.redirect(new URL(redirectPath, request.url));
+    return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url));
   }
 
   return NextResponse.next();
@@ -49,7 +82,10 @@ export const config = {
     "/dashboard/:path*",
     "/admin/:path*",
     "/tutor/:path*",
+    "/institute/:path*",
+    "/mentor/:path*",
+    "/moderator/:path*",
     "/login",
     "/register",
   ],
-};
+};

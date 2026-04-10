@@ -3,50 +3,48 @@ export const dynamic = "force-dynamic";
 import DashPageHeader from "@/components/layout/DashPageHeader";
 import { instituteService } from "@/services/institute.service";
 import { userService } from "@/services/user.service";
-import { courseService } from "@/services/course.service";
 import StatCards from "@/components/modules/institute/StatCards";
 import DashboardCharts from "@/components/modules/institute/DashboardCharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, User, TrendingUp, ArrowRight, Sparkles } from "lucide-react";
+import { BookOpen, User, ArrowRight, Sparkles, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
-export default async function InstituteDashboard() {
-  const [sessionRes, overviewRes, coursesRes] = await Promise.all([
-    await userService.getSession(),
-    await instituteService.getOverview(),
-    await courseService.getInstituteCourses({ limit: 5 }),
+export default async function InstituteDashboardPage() {
+  const [sessionRes, overviewRes] = await Promise.all([
+    userService.getSession(),
+    instituteService.getOverview(),
   ]);
 
   const user = sessionRes.data?.user;
-  // getOverview returns { totalMentors, totalCourses, totalEnrollments } directly
-  const overviewData = overviewRes.data?.data;
+  const overview = overviewRes.data?.data;
 
-  const stats = {
-    totalCourses: overviewData?.stats.totalCourses ?? 0,
-    totalMentors: overviewData?.stats.totalMentors ?? 0,
-    totalEnrollments: overviewData?.stats.totalEnrollments ?? 0,
-    totalRevenue: overviewData?.totalRevenue ?? 0,
+  // Fallback for new institutes with no data yet
+  const stats = overview?.stats || {
+    totalCourses: 0,
+    totalMentors: 0,
+    totalEnrollments: 0,
+    totalRevenue: 0,
   };
 
-  const recentCourses: any[] = coursesRes.data?.data?.data || [];
+  const recentCourses = overview?.recentCourses || [];
 
   return (
     <div className="space-y-8 pb-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <DashPageHeader
-          title={`Welcome back, ${user?.name.split(' ')[0]}!`}
-          description="Here's what's happening at your institute today."
+          title={`Institute Dashboard: ${user?.name}`}
+          description="Track growth, manage staff, and monitor your educational impact."
         />
         <div className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold border border-primary/20 animate-pulse">
           <Sparkles className="h-4 w-4" />
-          Growth Overview
+          Institute Growth Mode
         </div>
       </div>
 
       <StatCards stats={stats} />
 
-      {overviewData && <DashboardCharts overview={overviewData} />}
+      {overview && <DashboardCharts overview={overview} />}
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-12">
         <Card className="lg:col-span-8 overflow-hidden border-none shadow-md bg-card/50 backdrop-blur-sm">
@@ -90,9 +88,9 @@ export default async function InstituteDashboard() {
                                     </Badge>
                                 </div>
                                 <div className="flex items-center gap-3 mt-1 text-[11px] text-muted-foreground font-medium">
-                                    <span className="flex items-center gap-1"><User className="h-3 w-3" /> Students</span>
+                                    <span className="flex items-center gap-1"><User className="h-3 w-3" /> {course._count.enrollments} Students</span>
                                     <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
-                                    <span>${course.price}</span>
+                                    <span>{course.category?.name || "Uncategorized"}</span>
                                 </div>
                             </div>
                             <div className="text-right shrink-0">

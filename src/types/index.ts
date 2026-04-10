@@ -6,6 +6,17 @@ export * from "./availability.type"
 export * from "./booking.type"
 export * from "./tutor.type"
 export * from "./review.type"
+export * from "./course.type"
+export * from "./institute.type"
+
+
+export interface Mentor {
+  id: string;
+  user: {
+      name: string;
+      image: string | null;
+  };
+}
 
 
 export interface Subject {
@@ -26,7 +37,10 @@ export interface Category {
 export enum UserRoles {
   ADMIN = "ADMIN",
   STUDENT = "STUDENT",
-  TUTOR = "TUTOR"
+  TUTOR = "TUTOR",
+  INSTITUTE = "INSTITUTE",
+  MENTOR = "MENTOR",
+  MODERATOR = "MODERATOR"
 }
 
 export enum UserStatus {
