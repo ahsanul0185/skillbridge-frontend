@@ -87,7 +87,7 @@ const Navbar = ({
   },
   menu = [
     {
-      title: "Browse tutors",
+      title: "Browse Tutors",
       url: "/tutors",
     },
     {

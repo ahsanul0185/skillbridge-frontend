@@ -34,6 +34,7 @@ export interface ListUserPaginationProps {
     page?: number;
     total?: number;
     totalPages?: number;
+    role?: string;
 }
 
 

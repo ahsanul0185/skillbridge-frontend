@@ -2,6 +2,7 @@
 
 import { categoryService } from "@/services/category.service";
 import { tutorService } from "@/services/tutor.service";
+import { userService } from "@/services/user.service";
 import { Category, Subject } from "@/types";
 import { revalidatePath, updateTag } from "next/cache";
 
@@ -44,4 +45,9 @@ export const updateFetureTutorAction = async (isFeatured : boolean, tutorId : st
     const res = await tutorService.updateFeaturedTutor(isFeatured, tutorId);
     updateTag("tutorsList")
     return res
+}
+
+export const inviteModeratorAction = async (email: string, name: string) => {
+    const res = await userService.inviteModerator(email, name);
+    return res;
 }

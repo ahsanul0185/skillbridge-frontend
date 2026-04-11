@@ -158,7 +158,7 @@ export const userService = {
     }
   },
 
-getAdminAnalytics: async function () {
+  getAdminAnalytics: async function () {
     try {
       const cookieStore = await cookies();
 
@@ -167,6 +167,27 @@ getAdminAnalytics: async function () {
           Cookie: cookieStore.toString(),
           "Content-Type": "application/json",
         }
+      });
+      const data = await res.json();
+
+      return { data, error: null };
+    } catch (error) {
+      console.log(error);
+      return { data: null, error: { message: "Something went wrong" } };
+    }
+  },
+  
+  inviteModerator: async function (email: string, name: string) {
+    try {
+      const cookieStore = await cookies();
+
+      const res = await fetch(`${API_URL}/api/user/moderator/invite`, {
+        method: "POST",
+        headers: {
+          Cookie: cookieStore.toString(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, name }),
       });
       const data = await res.json();
 
