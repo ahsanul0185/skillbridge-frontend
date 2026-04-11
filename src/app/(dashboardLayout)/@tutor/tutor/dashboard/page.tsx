@@ -194,8 +194,8 @@ export default async function TutorDashboardOverview() {
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-semibold">${booking.price}</p>
-                      <Badge variant="secondary" className="text-xs">
-                        Confirmed
+                      <Badge variant={booking.status === "CONFIRMED" ? "secondary" : "outline"} className="text-xs">
+                        {booking.status}
                       </Badge>
                     </div>
                   </Link>

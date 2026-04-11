@@ -12,7 +12,8 @@ export interface Course {
   categoryId?: string | null;
   instituteId: string;
   mentorIds?: string[] | null;
-  status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
+  isPublished?: boolean;
+  status?: "DRAFT" | "PUBLISHED" | "ARCHIVED";
   createdAt: string;
   updatedAt: string;
   mentors?: {
@@ -20,12 +21,18 @@ export interface Course {
     user: {
         name: string;
         image: string | null;
-    }
+    };
+    expertise?: string | null;
   }[];
   category?: Category | null;
   institute?: {
-    id: string;
+    id?: string;
     name: string;
+    logoUrl?: string | null;
+    description?: string | null;
+  };
+  _count?: {
+    enrollments: number;
   };
 }
 

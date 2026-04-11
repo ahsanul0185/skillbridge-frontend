@@ -3,97 +3,113 @@ export const dynamic = "force-dynamic";
 import DashPageHeader from "@/components/layout/DashPageHeader";
 import { mentorService } from "@/services/mentor.service";
 import { userService } from "@/services/user.service";
+import StatCards from "@/components/modules/mentor/StatCards";
+import MentorCharts from "@/components/modules/mentor/MentorCharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Users, GraduationCap, Clock } from "lucide-react";
+import { BookOpen, Users, Star, ArrowRight, Sparkles, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default async function MentorDashboard() {
-  const [sessionRes, coursesRes] = await Promise.all([
+  const [sessionRes, overviewRes] = await Promise.all([
     userService.getSession(),
-    mentorService.getAssignedCourses({}),
+    mentorService.getOverview(),
   ]);
 
   const user = sessionRes.data?.user;
-  // Response shape: { success, data: { data: Course[], pagination: {...} } }
-  const courses = Array.isArray(coursesRes.data?.data?.data) ? coursesRes.data.data.data : [];
+  const overview = overviewRes.data?.data;
+
+  if (!overview) {
+      return (
+          <div className="flex items-center justify-center min-h-[400px]">
+              <p className="text-muted-foreground">Unable to load dashboard data. Please try again later.</p>
+          </div>
+      );
+  }
 
   return (
-    <div className="space-y-6">
-      <DashPageHeader
-        title={`Welcome back, ${user?.name.split(" ")[0]}!`}
-        description="Here are your assigned courses and student overview."
-      />
+    <div className="space-y-8 pb-10">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <DashPageHeader
+          title={`Welcome back, ${user?.name.split(" ")[0]}!`}
+          description="Here is your instructional impact and student growth overview."
+        />
+        <div className="flex items-center gap-2 bg-indigo-500/10 text-indigo-600 px-4 py-2 rounded-full text-sm font-semibold border border-indigo-500/20 animate-pulse">
+          <Sparkles className="h-4 w-4" />
+          Instructional Mode
+        </div>
+      </div>
 
-      {/* Stat row */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Assigned Courses</CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
+      <StatCards stats={overview.stats} />
+
+      <MentorCharts overview={overview} />
+
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-12">
+        {/* Recent Student Activity */}
+        <Card className="lg:col-span-7 overflow-hidden border-none shadow-md bg-card/50 backdrop-blur-sm">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-lg font-bold flex items-center gap-2">
+              <Users className="h-5 w-5 text-indigo-500" />
+              Recent Enrollments
+            </CardTitle>
+            <Link href="/mentor/rosters" className="text-xs text-primary hover:underline flex items-center gap-1 font-medium bg-primary/5 px-3 py-1.5 rounded-md transition-all">
+              View All <ArrowRight className="h-3 w-3" />
+            </Link>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{courses.length}</div>
-            <p className="text-xs text-muted-foreground">Active programs</p>
+            {overview.recentActivity.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-8 text-center">No recent enrollments found.</p>
+            ) : (
+                <div className="space-y-4">
+                    {overview.recentActivity.map((activity: any) => (
+                        <div key={activity.id} className="flex items-center gap-4 p-3 hover:bg-muted/30 rounded-xl transition-colors">
+                            <Avatar className="h-10 w-10 border-2 border-primary/10">
+                                <AvatarImage src={activity.student.image || undefined} />
+                                <AvatarFallback>{activity.student.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 min-w-0">
+                                <h4 className="text-sm font-bold truncate">{activity.student.name}</h4>
+                                <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
+                                    Joined: {activity.course.title}
+                                </p>
+                            </div>
+                            <div className="text-[10px] text-muted-foreground font-semibold">
+                                {new Date(activity.enrolledAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Students</CardTitle>
-            <GraduationCap className="h-4 w-4 text-muted-foreground" />
+
+        {/* Top Performing Courses */}
+        <Card className="lg:col-span-5 overflow-hidden border-none shadow-md bg-card/50 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="text-lg font-bold flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-emerald-500" />
+                Popular Courses
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">—</div>
-            <p className="text-xs text-muted-foreground">Across all courses</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Reviews</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">—</div>
-            <p className="text-xs text-muted-foreground">Awaiting grading</p>
+             <div className="space-y-4">
+                {overview.topCourses.map((c: any, i: number) => (
+                    <div key={c.name} className="flex items-center justify-between p-3 bg-muted/20 rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <span className="text-xs font-black text-primary/30 w-4">0{i+1}</span>
+                            <span className="text-sm font-bold tracking-tight truncate max-w-[180px]">{c.name}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 text-primary rounded-lg text-[10px] font-black">
+                            <Users className="h-3 w-3" />
+                            {c.enrollments}
+                        </div>
+                    </div>
+                ))}
+             </div>
           </CardContent>
         </Card>
       </div>
-
-      {/* Assigned Courses */}
-      <Card>
-        <CardHeader>
-          <CardTitle>My Courses</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {courses.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">
-              You have no assigned courses yet. Contact your institute admin.
-            </p>
-          ) : (
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {courses.map((course: any) => (
-                <Link
-                  key={course.id}
-                  href={`/mentor/rosters?courseId=${course.id}`}
-                  className="flex flex-col gap-2 p-4 border rounded-lg hover:bg-accent transition-colors"
-                >
-                  <div className="flex items-start justify-between">
-                    <h4 className="text-sm font-medium leading-tight">{course.title}</h4>
-                    <Badge variant={course.status === "PUBLISHED" ? "default" : "secondary"} className="text-xs ml-2 shrink-0">
-                      {course.status}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{course.description}</p>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-auto pt-1">
-                    <Users className="h-3 w-3" />
-                    <span>View Roster</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 }

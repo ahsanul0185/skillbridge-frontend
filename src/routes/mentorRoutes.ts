@@ -1,5 +1,5 @@
+import { LayoutDashboard, BookOpen, Users, Settings } from "lucide-react";
 import { Route } from "@/types";
-import { LayoutDashboard, BookOpen, Users } from "lucide-react";
 
 export const mentorRoutes: Route[] = [
   {
@@ -10,6 +10,7 @@ export const mentorRoutes: Route[] = [
       { title: "Overview", url: "/mentor/dashboard", icon: LayoutDashboard },
       { title: "My Assigned Courses", url: "/mentor/courses", icon: BookOpen },
       { title: "Student Rosters", url: "/mentor/rosters", icon: Users },
+      { title: "Settings", url: "/mentor/settings", icon: Settings },
     ],
   },
 ];

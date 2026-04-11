@@ -7,7 +7,8 @@ export const createCourseAction = async (courseData: {
   title: string;
   description: string;
   price: number;
-  status: string;
+  status?: string;
+  isPublished?: boolean;
   mentorIds: string[];
   level: string;
   duration?: string;
@@ -15,7 +16,7 @@ export const createCourseAction = async (courseData: {
   categoryId?: string;
 }) => {
   const { status, ...rest } = courseData;
-  const isPublished = status === "PUBLISHED";
+  const isPublished = courseData.isPublished !== undefined ? courseData.isPublished : status === "PUBLISHED";
   const res = await courseService.createCourse({ ...rest, isPublished });
   revalidatePath("/institute/courses");
   return res;
@@ -25,7 +26,8 @@ export const updateCourseAction = async (courseId: string, courseData: {
   title: string;
   description: string;
   price: number;
-  status: string;
+  status?: string;
+  isPublished?: boolean;
   mentorIds: string[];
   level: string;
   duration?: string;
@@ -33,7 +35,7 @@ export const updateCourseAction = async (courseId: string, courseData: {
   categoryId?: string;
 }) => {
   const { status, ...rest } = courseData;
-  const isPublished = status === "PUBLISHED";
+  const isPublished = courseData.isPublished !== undefined ? courseData.isPublished : status === "PUBLISHED";
   const res = await courseService.updateCourse(courseId, { ...rest, isPublished });
   revalidatePath("/institute/courses");
   return res;
@@ -43,4 +45,8 @@ export const deleteCourseAction = async (courseId: string) => {
   const res = await courseService.deleteCourse(courseId);
   revalidatePath("/institute/courses");
   return res;
+};
+
+export const getEnrolledCoursesAction = async (params?: any) => {
+    return await courseService.getEnrolledCourses(params);
 };

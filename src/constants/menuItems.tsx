@@ -13,6 +13,10 @@ export const menuItems : MenuItem[] =  [
       title: "Browse tutors",
       url: "/tutors",
     },
+    {
+      title: "Browse Courses",
+      url: "/courses",
+    },
     //  {
     //   title: "Categories",
     //   url: "#",

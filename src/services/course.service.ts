@@ -112,4 +112,31 @@ export const courseService = {
       return { data: null, error: { message: error?.message || "Something went wrong" } };
     }
   },
+
+  getEnrolledCourses: async (params?: any) => {
+    try {
+      const cookieStore = await cookies();
+      const url = new URL(`${API_URL}/api/courses/enrolled/list`);
+      
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            url.searchParams.append(key, value as string);
+          }
+        });
+      }
+
+      const res = await fetch(url.toString(), {
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+        cache: "no-store",
+      });
+
+      const data = await res.json();
+      return { data, error: null };
+    } catch (error: any) {
+      return { data: null, error: { message: error?.message || "Something went wrong" } };
+    }
+  },
 };

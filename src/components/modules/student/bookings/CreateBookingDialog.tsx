@@ -13,6 +13,7 @@ import { Star, Clock, BookOpen } from 'lucide-react';
 import { formatTime, formatDay, calcDuration, getInitials } from '@/lib/utils';
 import { toast } from 'sonner';
 import { createBookingAction } from '@/actions/student.action';
+import { createBookingPaymentAction } from '@/actions/payment.action';
 
 export default function CreateBookingDialog({ tutor }: { tutor: TutorForModal }) {
   const searchParams = useSearchParams();
@@ -56,12 +57,27 @@ export default function CreateBookingDialog({ tutor }: { tutor: TutorForModal })
 
       if (res.error) {
         toast.error(res.error, { id: toastId });
+        setIsLoading(false);
         return;
       }
 
-      handleClose();
-      router.push("/dashboard/bookings")
-      toast.success(res.data.message || "Session booked", { id: toastId});
+      toast.loading("Redirecting to checkout...", { id: toastId });
+      
+      const paymentRes = await createBookingPaymentAction(res.data.data.id);
+      
+      if (paymentRes.error) {
+          toast.error(paymentRes.error, { id: toastId });
+          setIsLoading(false);
+          return;
+      }
+
+      if (paymentRes.data?.data?.paymentUrl) {
+          // Redirect to Stripe checkout
+          window.location.href = paymentRes.data.data.paymentUrl;
+      } else {
+          toast.error("Failed to generate payment URL", { id: toastId });
+          setIsLoading(false);
+      }
     } catch (error) {
       toast.error("Failed to book the session", { id: toastId });
       console.error('Booking failed:', error);

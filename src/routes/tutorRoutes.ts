@@ -5,7 +5,8 @@ import {
   CalendarCheck, 
   Clock, 
   Settings,
-  Star
+  Star,
+  CreditCard
 } from "lucide-react";
 
 
@@ -18,6 +19,7 @@ export const tutorRoutes: Route[] = [
       { title: "Overview", url: "/tutor/dashboard", icon: LayoutDashboard },
       { title: "My Bookings", url: "/tutor/bookings", icon: CalendarCheck },
       { title: "Availability", url: "/tutor/availability", icon: Clock },
+      { title: "Payments", url: "/tutor/payments", icon: CreditCard },
       { title: "My Profile", url: "/tutor/profile", icon: Settings },
       { title: "Reviews", url: "/tutor/reviews", icon: Star },
     ],

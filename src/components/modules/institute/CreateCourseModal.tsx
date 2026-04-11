@@ -85,6 +85,7 @@ export default function CreateCourseModal({
         status: form.status,
         level: form.level,
         mentorIds: form.mentorIds,
+        isPublished : true,
         // Only include optional fields if they have values (avoid empty-string UUID/URL validation failures)
         ...(form.duration.trim() && { duration: form.duration.trim() }),
         ...(form.thumbnailUrl.trim() && { thumbnailUrl: form.thumbnailUrl.trim() }),
@@ -167,23 +168,6 @@ export default function CreateCourseModal({
                 onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
                 required
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="create-status">Status</Label>
-              <Select
-                value={form.status}
-                onValueChange={(val: "DRAFT" | "PUBLISHED") =>
-                  setForm((f) => ({ ...f, status: val }))
-                }
-              >
-                <SelectTrigger id="create-status">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="DRAFT">Draft</SelectItem>
-                  <SelectItem value="PUBLISHED">Published</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
           </div>
 

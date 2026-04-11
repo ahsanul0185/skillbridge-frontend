@@ -1,6 +1,5 @@
 'use client';
-
-
+import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -10,8 +9,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';  
-import { Eye } from 'lucide-react';
-// import { updateBookingStatusAction } from '@/actions/booking.action';
+import { Eye, CreditCard, Loader2 } from 'lucide-react';
+import { createBookingPaymentAction } from '@/actions/payment.action';
 import { Booking, BookingStatus } from '@/types';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -21,6 +20,7 @@ import { updateBookingStatusAction } from '@/actions/user.action';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
+  PENDING: 'outline',
   CONFIRMED: 'secondary',
   COMPLETED: 'default',
   CANCELLED: 'destructive',
@@ -32,6 +32,28 @@ interface BookingsTableProps {
 }
 
 export function StudentBookingsTable({ bookings }: BookingsTableProps) {
+  const [loadingPaymentId, setLoadingPaymentId] = useState<string | null>(null);
+
+  const handlePayment = async (bookingId: string) => {
+    setLoadingPaymentId(bookingId);
+    const toastId = toast.loading("Redirecting to checkout...");
+    try {
+      const res = await createBookingPaymentAction(bookingId);
+      if (res.error) {
+        toast.error(res.error, { id: toastId });
+        return;
+      }
+      if (res.data?.data?.paymentUrl) {
+        window.location.href = res.data.data.paymentUrl;
+      } else {
+        toast.error("Failed to generate payment URL", { id: toastId });
+      }
+    } catch (err) {
+      toast.error("Something went wrong", { id: toastId });
+    } finally {
+      setLoadingPaymentId(null);
+    }
+  };
 
   const handleStatusChange = async (newStatus: BookingStatus, bookingId: string) => {
     const toastId = toast.loading("Cancelling session...");
@@ -157,6 +179,21 @@ export function StudentBookingsTable({ bookings }: BookingsTableProps) {
                     </DialogFooter>
                     </DialogContent>
                 </Dialog>
+                }
+
+                { booking.status === BookingStatus.PENDING && 
+                  <Button 
+                    variant="default" 
+                    className="text-xs px-2 h-6 py-0 cursor-pointer"
+                    onClick={() => handlePayment(booking.id)}
+                    disabled={loadingPaymentId === booking.id}
+                  >
+                    {loadingPaymentId === booking.id ? (
+                      <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Wait</>
+                    ) : (
+                      <><CreditCard className="h-3 w-3 mr-1" /> Pay Now</>
+                    )}
+                  </Button>
                 }
 
                 <Link
