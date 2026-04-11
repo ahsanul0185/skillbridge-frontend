@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { EB_Garamond, Faustina, Geist, Geist_Mono, Lexend, Slabo_13px } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { AIChatbot } from "@/components/modules/shared/AIChatbot";
 
 import LoganFive from "next/font/local";
 
@@ -38,6 +39,7 @@ export default function RootLayout({
       >
           {children}
           <Toaster richColors/>
+          <AIChatbot />
       </body>
     </html>
   );
