@@ -131,4 +131,24 @@ export const instituteService = {
       return { data: null, error: { message: "Something went wrong" } };
     }
   },
+
+  updateInstituteProfile: async function (formData: FormData) {
+    try {
+      const cookieStore = await cookies();
+
+      const res = await fetch(`${API_URL}/api/institutes/update`, {
+        method: "PUT",
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+        body: formData,
+      });
+      const data = await res.json();
+
+      return { data, error: null };
+    } catch (error) {
+      console.log(error);
+      return { data: null, error: { message: "Something went wrong" } };
+    }
+  },
 };

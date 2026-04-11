@@ -8,3 +8,9 @@ export const inviteMentorAction = async (email: string, name: string) => {
   revalidatePath("/institute/mentors");
   return res;
 };
+
+export const updateInstituteProfileAction = async (formData: FormData) => {
+  const res = await instituteService.updateInstituteProfile(formData);
+  revalidatePath("/institute/profile");
+  return res;
+};

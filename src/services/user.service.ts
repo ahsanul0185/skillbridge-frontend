@@ -54,7 +54,7 @@ export const userService = {
       return { data: null, error: { message: "Something went wrong" } };
     }
   },
-  updateProfile: async function (updatedData: Partial<User>) {
+  updateProfile: async function (updatedData: FormData) {
     try {
       const cookieStore = await cookies();
 
@@ -62,9 +62,8 @@ export const userService = {
         method: "PUT",
         headers: {
           Cookie: cookieStore.toString(),
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedData),
+        body: updatedData,
       });
       const data = await res.json();
 

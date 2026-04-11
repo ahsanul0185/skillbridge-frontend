@@ -26,7 +26,7 @@ import { updateProfileAction } from "@/actions/user.action";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  image: z.string().url().or(z.literal("")),
+  image: z.any(), // Can be string or File
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
 });
 
@@ -35,7 +35,7 @@ export function UserProfileForm({user}:  {user : Partial<User>}) {
   const form = useForm({
     defaultValues: {
       name: user.name || "",
-      image: user.image ?? "",
+      image: undefined as any,
       phone: user.phone ?? "",
     },
     validators: {
@@ -45,7 +45,14 @@ export function UserProfileForm({user}:  {user : Partial<User>}) {
       const toastId = toast.loading("Updating profile...");
 
       try {
-        const res = await updateProfileAction(value);
+        const formData = new FormData();
+        formData.append("name", value.name);
+        if (value.phone) formData.append("phone", value.phone);
+        if (value.image && value.image instanceof File) {
+            formData.append("image", value.image);
+        }
+
+        const res = await updateProfileAction(formData);
 
         if (res?.error) {
           toast.error(res.error.message, { id: toastId });
@@ -138,7 +145,7 @@ export function UserProfileForm({user}:  {user : Partial<User>}) {
               }}
             />
 
-            {/* Image URL Field */}
+            {/* Image File Field */}
             <form.Field
               name="image"
               children={(field) => {
@@ -147,13 +154,13 @@ export function UserProfileForm({user}:  {user : Partial<User>}) {
                 return (
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>
-                      Profile Picture URL
+                      Profile Picture
                     </FieldLabel>
                     <Input
                       id={field.name}
-                      value={field.state.value || ""}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="https://example.com/photo.jpg"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => field.handleChange(e.target.files?.[0] || undefined)}
                     />
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />

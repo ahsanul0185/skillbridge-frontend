@@ -21,6 +21,7 @@ export const instituteRoutes: Route[] = [
       { title: "Student Community", url: "/institute/students", icon: GraduationCap },
       { title: "Reviews & Ratings", url: "/institute/reviews", icon: Star },
       { title: "Payment History", url: "/institute/payments", icon: ReceiptText },
+      { title: "Profile Settings", url: "/institute/profile", icon: Settings },
     ],
   },
 ];

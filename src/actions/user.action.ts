@@ -5,7 +5,7 @@ import { userService } from "@/services/user.service";
 import { BookingStatus, User, UserProfileFormProps, UserStatus } from "@/types"
 import { revalidatePath, updateTag } from "next/cache";
 
-export const updateProfileAction = async (updatedData : Partial<User>) => {
+export const updateProfileAction = async (updatedData : FormData) => {
     const res = await userService.updateProfile(updatedData);
     revalidatePath  ("/profile");
     return res
