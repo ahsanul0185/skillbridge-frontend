@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus } from "lucide-react";
+import { ImagePlus, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { Category, Mentor } from "@/types";
 import { createCourseAction } from "@/actions/course.action";
@@ -38,7 +38,6 @@ const EMPTY_FORM = {
   status: "DRAFT" as "DRAFT" | "PUBLISHED",
   level: "BEGINNER" as "BEGINNER" | "INTERMEDIATE" | "ADVANCED",
   duration: "",
-  thumbnailUrl: "",
   categoryId: "",
   mentorIds: [] as string[],
 };
@@ -50,6 +49,9 @@ export default function CreateCourseModal({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleMentorToggle = (id: string) => {
     setForm((prev) => ({
@@ -58,6 +60,24 @@ export default function CreateCourseModal({
         ? prev.mentorIds.filter((x) => x !== id)
         : [...prev.mentorIds, id],
     }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setThumbnailFile(file);
+    setThumbnailPreview(URL.createObjectURL(file));
+  };
+
+  const clearThumbnail = () => {
+    setThumbnailFile(null);
+    setThumbnailPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const resetForm = () => {
+    setForm(EMPTY_FORM);
+    clearThumbnail();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -78,21 +98,19 @@ export default function CreateCourseModal({
     const toastId = toast.loading("Creating course...");
 
     try {
-      const payload = {
-        title: form.title,
-        description: form.description,
-        price: priceNum,
-        status: form.status,
-        level: form.level,
-        mentorIds: form.mentorIds,
-        isPublished : true,
-        // Only include optional fields if they have values (avoid empty-string UUID/URL validation failures)
-        ...(form.duration.trim() && { duration: form.duration.trim() }),
-        ...(form.thumbnailUrl.trim() && { thumbnailUrl: form.thumbnailUrl.trim() }),
-        ...(form.categoryId && { categoryId: form.categoryId }),
-      };
+      // Build FormData so the file and fields are sent in one multipart request
+      const fd = new FormData();
+      fd.append("title", form.title);
+      fd.append("description", form.description);
+      fd.append("price", String(priceNum));
+      fd.append("level", form.level);
+      fd.append("isPublished", String(form.status === "PUBLISHED"));
+      if (form.duration.trim()) fd.append("duration", form.duration.trim());
+      if (form.categoryId)      fd.append("categoryId", form.categoryId);
+      form.mentorIds.forEach((id) => fd.append("mentorIds", id));
+      if (thumbnailFile)        fd.append("thumbnail", thumbnailFile);
 
-      const res = await createCourseAction(payload);
+      const res = await createCourseAction(fd);
 
       if (!res?.data?.success) {
         toast.error(
@@ -103,7 +121,7 @@ export default function CreateCourseModal({
       }
 
       toast.success("Course created successfully!", { id: toastId });
-      setForm(EMPTY_FORM);
+      resetForm();
       setOpen(false);
     } catch {
       toast.error("Something went wrong. Please try again.", { id: toastId });
@@ -113,7 +131,7 @@ export default function CreateCourseModal({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetForm(); }}>
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
@@ -169,6 +187,23 @@ export default function CreateCourseModal({
                 required
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="create-status">Status</Label>
+              <Select
+                value={form.status}
+                onValueChange={(val: "DRAFT" | "PUBLISHED") =>
+                  setForm((f) => ({ ...f, status: val }))
+                }
+              >
+                <SelectTrigger id="create-status">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="DRAFT">Draft</SelectItem>
+                  <SelectItem value="PUBLISHED">Published</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Level + Category */}
@@ -214,27 +249,55 @@ export default function CreateCourseModal({
             </div>
           </div>
 
-          {/* Duration + Thumbnail */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="create-duration">Duration</Label>
-              <Input
-                id="create-duration"
-                placeholder="e.g. 4 Weeks"
-                value={form.duration}
-                onChange={(e) => setForm((f) => ({ ...f, duration: e.target.value }))}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="create-thumbnail">Thumbnail URL</Label>
-              <Input
-                id="create-thumbnail"
-                type="url"
-                placeholder="https://example.com/image.jpg"
-                value={form.thumbnailUrl}
-                onChange={(e) => setForm((f) => ({ ...f, thumbnailUrl: e.target.value }))}
-              />
-            </div>
+          {/* Duration */}
+          <div className="space-y-2">
+            <Label htmlFor="create-duration">Duration</Label>
+            <Input
+              id="create-duration"
+              placeholder="e.g. 4 Weeks"
+              value={form.duration}
+              onChange={(e) => setForm((f) => ({ ...f, duration: e.target.value }))}
+            />
+          </div>
+
+          {/* Thumbnail upload */}
+          <div className="space-y-2">
+            <Label>Course Thumbnail</Label>
+            {thumbnailPreview ? (
+              <div className="relative w-full h-36 rounded-md overflow-hidden border">
+                {/* plain img — handles both blob: (local preview) and https: (Cloudinary) */}
+                <img
+                  src={thumbnailPreview}
+                  alt="Thumbnail preview"
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={clearThumbnail}
+                  className="absolute top-2 right-2 bg-black/60 hover:bg-black/80 text-white rounded-full p-1 transition"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex flex-col items-center justify-center w-full h-36 rounded-md border-2 border-dashed border-input hover:border-primary/50 bg-muted/30 hover:bg-muted/50 transition cursor-pointer gap-2"
+              >
+                <ImagePlus className="h-8 w-8 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Click to upload thumbnail</span>
+                <span className="text-xs text-muted-foreground">JPG, PNG, WebP, SVG</span>
+              </button>
+            )}
+            <input
+              ref={fileInputRef}
+              id="create-thumbnail-file"
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml"
+              className="hidden"
+              onChange={handleFileChange}
+            />
           </div>
 
           {/* Mentors */}
@@ -265,7 +328,7 @@ export default function CreateCourseModal({
             <Button
               type="button"
               variant="outline"
-              onClick={() => { setOpen(false); setForm(EMPTY_FORM); }}
+              onClick={() => { setOpen(false); resetForm(); }}
               disabled={loading}
             >
               Cancel

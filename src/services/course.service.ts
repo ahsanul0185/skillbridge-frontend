@@ -39,16 +39,16 @@ export const courseService = {
     }
   },
 
-  createCourse: async (courseData: any) => {
+  createCourse: async (courseData: FormData) => {
     try {
       const cookieStore = await cookies();
       const res = await fetch(`${API_URL}/api/courses/create`, {
         method: "POST",
         headers: {
+          // Do NOT set Content-Type — let the browser/Node set the multipart boundary automatically
           Cookie: cookieStore.toString(),
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify(courseData),
+        body: courseData,
       });
       const data = await res.json();
       return { data, error: null };
@@ -79,16 +79,16 @@ export const courseService = {
     }
   },
 
-  updateCourse: async (courseId: string, courseData: any) => {
+  updateCourse: async (courseId: string, courseData: FormData) => {
     try {
       const cookieStore = await cookies();
       const res = await fetch(`${API_URL}/api/courses/update/${courseId}`, {
         method: "PUT",
         headers: {
+          // Do NOT set Content-Type — let the browser/Node set the multipart boundary automatically
           Cookie: cookieStore.toString(),
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify(courseData),
+        body: courseData,
       });
       const data = await res.json();
       return { data, error: null };

@@ -65,6 +65,7 @@ export default function CourseTable({ courses, mentors, categories }: CourseTabl
             <TableHead>Mentor</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>Price</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead>Created</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
@@ -72,7 +73,7 @@ export default function CourseTable({ courses, mentors, categories }: CourseTabl
         <TableBody>
           {courses.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="h-24 text-center">
+              <TableCell colSpan={7} className="h-24 text-center">
                 No courses found.
               </TableCell>
             </TableRow>
@@ -109,6 +110,11 @@ export default function CourseTable({ courses, mentors, categories }: CourseTabl
                   )}
                 </TableCell>
                 <TableCell>${course.price}</TableCell>
+                <TableCell>
+                  <Badge variant={course.isPublished ? "default" : "secondary"}>
+                    {course.isPublished ? "PUBLISHED" : "DRAFT"}
+                  </Badge>
+                </TableCell>
                 <TableCell className="text-muted-foreground text-sm">
                   {new Date(course.createdAt).toLocaleDateString()}
                 </TableCell>

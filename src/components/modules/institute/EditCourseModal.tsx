@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ImagePlus, X } from "lucide-react";
 import { toast } from "sonner";
 import { Course, Category, Mentor } from "@/types";
 import { updateCourseAction } from "@/actions/course.action";
@@ -36,10 +37,9 @@ const buildFormFromCourse = (course: Course) => ({
   title: course.title,
   description: course.description,
   price: course.price.toString(),
-  status: (course.status ?? "DRAFT") as "DRAFT" | "PUBLISHED",
+  status: (course.isPublished ? "PUBLISHED" : "DRAFT") as "DRAFT" | "PUBLISHED",
   level: (course.level ?? "BEGINNER") as "BEGINNER" | "INTERMEDIATE" | "ADVANCED",
   duration: course.duration ?? "",
-  thumbnailUrl: course.thumbnailUrl ?? "",
   categoryId: course.categoryId ?? "",
   mentorIds: course.mentors?.map((m) => m.id) ?? [],
 });
@@ -53,11 +53,18 @@ export default function EditCourseModal({
 }: EditCourseModalProps) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(() => buildFormFromCourse(course));
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(
+    course.thumbnailUrl ?? null
+  );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Re-sync when the selected course or open state changes
   useEffect(() => {
     if (open && course) {
       setForm(buildFormFromCourse(course));
+      setThumbnailFile(null);
+      setThumbnailPreview(course.thumbnailUrl ?? null);
     }
   }, [course, open]);
 
@@ -68,6 +75,19 @@ export default function EditCourseModal({
         ? prev.mentorIds.filter((x) => x !== id)
         : [...prev.mentorIds, id],
     }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setThumbnailFile(file);
+    setThumbnailPreview(URL.createObjectURL(file));
+  };
+
+  const clearThumbnail = () => {
+    setThumbnailFile(null);
+    setThumbnailPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -88,20 +108,21 @@ export default function EditCourseModal({
     const toastId = toast.loading("Updating course...");
 
     try {
-      const payload = {
-        title: form.title,
-        description: form.description,
-        price: priceNum,
-        status: form.status,
-        level: form.level,
-        mentorIds: form.mentorIds,
-        // Omit optional fields when blank to avoid backend UUID/URL validation errors
-        ...(form.duration.trim() && { duration: form.duration.trim() }),
-        ...(form.thumbnailUrl.trim() && { thumbnailUrl: form.thumbnailUrl.trim() }),
-        ...(form.categoryId && { categoryId: form.categoryId }),
-      };
+      // Build FormData so the file and fields are sent in one multipart request
+      const fd = new FormData();
+      fd.append("title", form.title);
+      fd.append("description", form.description);
+      fd.append("price", String(priceNum));
+      fd.append("level", form.level);
+      fd.append("isPublished", String(form.status === "PUBLISHED"));
+      if (form.duration.trim()) fd.append("duration", form.duration.trim());
+      if (form.categoryId)      fd.append("categoryId", form.categoryId);
+      form.mentorIds.forEach((id) => fd.append("mentorIds", id));
+      if (thumbnailFile)        fd.append("thumbnail", thumbnailFile);
+      // If the user cleared the thumbnail and there's no new file, we could signal removal.
+      // For now we leave thumbnailUrl unchanged on the server if no new file is uploaded.
 
-      const res = await updateCourseAction(course.id, payload);
+      const res = await updateCourseAction(course.id, fd);
 
       if (!res?.data?.success) {
         toast.error(
@@ -233,27 +254,60 @@ export default function EditCourseModal({
             </div>
           </div>
 
-          {/* Duration + Thumbnail */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-duration">Duration</Label>
-              <Input
-                id="edit-duration"
-                placeholder="e.g. 4 Weeks"
-                value={form.duration}
-                onChange={(e) => setForm((f) => ({ ...f, duration: e.target.value }))}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-thumbnail">Thumbnail URL</Label>
-              <Input
-                id="edit-thumbnail"
-                type="url"
-                placeholder="https://example.com/image.jpg"
-                value={form.thumbnailUrl}
-                onChange={(e) => setForm((f) => ({ ...f, thumbnailUrl: e.target.value }))}
-              />
-            </div>
+          {/* Duration */}
+          <div className="space-y-2">
+            <Label htmlFor="edit-duration">Duration</Label>
+            <Input
+              id="edit-duration"
+              placeholder="e.g. 4 Weeks"
+              value={form.duration}
+              onChange={(e) => setForm((f) => ({ ...f, duration: e.target.value }))}
+            />
+          </div>
+
+          {/* Thumbnail upload */}
+          <div className="space-y-2">
+            <Label>Course Thumbnail</Label>
+            {thumbnailPreview ? (
+              <div className="relative w-full h-36 rounded-md overflow-hidden border">
+                {/* plain img — handles both blob: (local preview) and https: (Cloudinary) */}
+                <img
+                  src={thumbnailPreview}
+                  alt="Thumbnail preview"
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={clearThumbnail}
+                  className="absolute top-2 right-2 bg-black/60 hover:bg-black/80 text-white rounded-full p-1 transition"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex flex-col items-center justify-center w-full h-36 rounded-md border-2 border-dashed border-input hover:border-primary/50 bg-muted/30 hover:bg-muted/50 transition cursor-pointer gap-2"
+              >
+                <ImagePlus className="h-8 w-8 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Click to upload thumbnail</span>
+                <span className="text-xs text-muted-foreground">JPG, PNG, WebP, SVG</span>
+              </button>
+            )}
+            <input
+              ref={fileInputRef}
+              id="edit-thumbnail-file"
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            {thumbnailFile && (
+              <p className="text-xs text-muted-foreground">
+                New file selected: <span className="font-medium">{thumbnailFile.name}</span>
+              </p>
+            )}
           </div>
 
           {/* Mentors */}

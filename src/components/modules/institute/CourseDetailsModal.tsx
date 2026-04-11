@@ -18,7 +18,7 @@ interface CourseDetailsModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const statusVariant = (status: string) => {
+const statusVariant = (status?: string): "default" | "secondary" | "destructive" | "outline" => {
   switch (status) {
     case "PUBLISHED": return "default";
     case "DRAFT": return "secondary";
@@ -49,8 +49,8 @@ export default function CourseDetailsModal({
             <DialogTitle className="text-xl font-bold leading-tight">
               {course.title}
             </DialogTitle>
-            <Badge variant={statusVariant(course.status)} className="shrink-0 mt-0.5">
-              {course.status}
+            <Badge variant={course.isPublished ? "default" : "secondary"} className="shrink-0 mt-0.5">
+              {course.isPublished ? "PUBLISHED" : "DRAFT"}
             </Badge>
           </div>
           <DialogDescription className="text-sm mt-1">
