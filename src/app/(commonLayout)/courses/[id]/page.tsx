@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CourseEnrollButton from "@/components/modules/course/coursePage/CourseEnrollButton";
+import CourseCard from "@/components/modules/course/coursePage/CourseCard";
 
 const LEVEL_COLORS: Record<string, string> = {
   BEGINNER: "bg-green-100 text-green-700 border-green-200",
@@ -274,6 +275,25 @@ export default async function CourseDetailsPage({
             <CourseEnrollButton courseId={course.id} />
           </CardContent>
         </Card>
+
+        {/* Related Courses */}
+        {course.relatedCourses && course.relatedCourses.length > 0 && (
+          <div className="pt-20 pb-10">
+            <div className="mb-10">
+              <h2 className="text-3xl font-bold tracking-tight">
+                Recommended <span className="text-primary">Courses</span>
+              </h2>
+              <p className="text-muted-foreground mt-2">
+                Explore other world-class programs in {course.category?.name}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+              {course.relatedCourses.map((related: any) => (
+                <CourseCard key={related.id} course={related} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

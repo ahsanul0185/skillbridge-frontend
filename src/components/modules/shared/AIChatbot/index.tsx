@@ -92,13 +92,13 @@ export const AIChatbot = () => {
                         {/* Header */}
                         <div className="bg-primary p-4 text-primary-foreground flex items-center justify-between shadow-sm z-10">
                             <div className="flex items-center gap-2">
-                                <Sparkles className="w-5 h-5 text-accent-foreground" />
+                                <Sparkles className="w-5 h-5 text-white" />
                                 <span className="font-semibold text-lg tracking-tight">SkillBridge AI</span>
                             </div>
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="text-primary-foreground hover:bg-black/10 h-8 w-8"
+                                className="text-primary-foreground hover:bg-white/10 hover:text-white h-8 w-8"
                                 onClick={() => setIsOpen(false)}
                             >
                                 <X className="w-5 h-5" />

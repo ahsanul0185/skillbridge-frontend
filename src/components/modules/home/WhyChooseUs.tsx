@@ -41,23 +41,12 @@ export default function WhyChooseUs() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="lg:w-1/2 relative"
           >
-            <div className="relative aspect-square w-full max-w-lg mx-auto overflow-hidden rounded-[3rem] shadow-2xl">
-              <Image
-                src="/why_choose_us.png"
+            <div className="relative aspect-square w-full max-w-lg mx-auto overflow-hidden shadow-xl">
+              <img
+                src="https://t4.ftcdn.net/jpg/02/15/94/25/360_F_215942539_pDtJ0enEFJsgmtKJIAzuTkF6qOtkcvFH.jpg"
                 alt="Why Choose SkillBridge"
-                fill
-                className="object-cover transition-transform duration-700 hover:scale-105"
+                className="object-cover transition-transform duration-700 h-full w-full hover:scale-105"
               />
-              {/* Floating Badge */}
-              <div className="absolute top-8 right-8 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-white/50">
-                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                  <CheckCircle2 className="w-6 h-6" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Platform</p>
-                  <p className="text-sm font-bold text-slate-900">Verified Quality</p>
-                </div>
-              </div>
             </div>
             {/* Background Decoration */}
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/20 rounded-full blur-[80px] -z-10" />

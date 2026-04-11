@@ -1,8 +1,5 @@
 import React from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+import { Facebook, Instagram, Twitter, Youtube, Mail, MapPin, Phone } from "lucide-react";
 import Logo from "./Logo";
 import { categoryService } from "@/services/category.service";
 import { Category } from "@/types";
@@ -13,84 +10,95 @@ export default async function Footer() {
   const popularCategories = categoryData?.data.slice(0, 4) ?? [];
 
   return (
-    <footer className="bg-white border-t text-foreground">
-      <div className="container mx-auto px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          {/* Left Column - Branding and Links */}
-          <div>
-            <Logo />
-            <br />
+    <footer className="bg-slate-900 text-slate-300">
+      <div className="container mx-auto px-8 pt-20 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          
+          {/* Column 1: Branding */}
+          <div className="space-y-6">
+            <Logo 
+              className="mb-0" 
+              imgClassName="brightness-0 invert h-10 w-auto" 
+              textClassName="text-white"
+            />
+            <p className="text-slate-400 text-sm leading-relaxed max-max-w-[280px]">
+              SkillBridge is on a mission to democratize expert learning by 
+              connecting passionate learners with world-class tutors and institutions.
+            </p>
+            <div className="flex gap-4 pt-2">
+              <a href="#" className="hover:text-primary transition-colors duration-200"><Facebook className="w-5 h-5" /></a>
+              <a href="#" className="hover:text-primary transition-colors duration-200"><Twitter className="w-5 h-5" /></a>
+              <a href="#" className="hover:text-primary transition-colors duration-200"><Instagram className="w-5 h-5" /></a>
+              <a href="#" className="hover:text-primary transition-colors duration-200"><Youtube className="w-5 h-5" /></a>
+            </div>
+          </div>
 
-            {/* Navigation Links */}
-            <div className="grid grid-cols-2 gap-4 mb-8">
+          {/* Column 2: Platform Links */}
+          <div className="space-y-6">
+            <h4 className="text-white font-bold tracking-wider uppercase text-xs">Platform</h4>
+            <ul className="space-y-4 text-sm">
+              <li><Link href="/tutors" className="hover:text-primary transition-colors duration-200">Find a Tutor</Link></li>
+              <li><Link href="/courses" className="hover:text-primary transition-colors duration-200">Explore Courses</Link></li>
+              <li><Link href="/about" className="hover:text-primary transition-colors duration-200">About Us</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Top Categories */}
+          <div className="space-y-6">
+            <h4 className="text-white font-bold tracking-wider uppercase text-xs">Recommended</h4>
+            <ul className="space-y-4 text-sm">
               {popularCategories.map((category: Category) => (
-                <Link
-                  href={`/tutors?categoryId=${category.id}`}
-                  key={category.id}
-                  className="block hover:underline hover:text-primary"
-                >
-                  {category.name}
-                </Link>
+                <li key={category.id}>
+                  <Link
+                    href={`/tutors?categoryId=${category.id}`}
+                    className="hover:text-primary transition-colors duration-200"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
               ))}
-            </div>
-
-            {/* Social Media Icons */}
-            <div className="flex gap-4">
-              <a
-                href="#"
-                className="hover:opacity-80 transition-opacity"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-6 h-6" />
-              </a>
-              <a
-                href="#"
-                className="hover:opacity-80 transition-opacity"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-6 h-6" />
-              </a>
-              <a
-                href="#"
-                className="hover:opacity-80 transition-opacity"
-                aria-label="YouTube"
-              >
-                <Youtube className="w-6 h-6" />
-              </a>
-            </div>
+              {popularCategories.length === 0 && (
+                <>
+                  <li><Link href="/tutors" className="hover:text-primary transition-colors duration-200">Design & Creative</Link></li>
+                  <li><Link href="/tutors" className="hover:text-primary transition-colors duration-200">Development</Link></li>
+                  <li><Link href="/tutors" className="hover:text-primary transition-colors duration-200">Business</Link></li>
+                </>
+              )}
+            </ul>
           </div>
 
-          {/* Right Column - Newsletter Signup */}
-          <div>
-            <h3 className="text-xl font-semibold mb-6">
-               Get SkillBridge updates
-            </h3>
-
-            <div className="flex gap-2 mb-4">
-              <Input type="email" placeholder="Your email here" />
-              <Button variant="secondary" className="whitespace-nowrap">
-                Subscribe
-              </Button>
-            </div>
+          {/* Column 4: Contact/Legal */}
+          <div className="space-y-6">
+            <h4 className="text-white font-bold tracking-wider uppercase text-xs">Contact Us</h4>
+            <ul className="space-y-4 text-sm">
+              <li className="flex items-start gap-3">
+                <Mail className="w-4 h-4 text-primary mt-1 shrink-0" />
+                <span>hello@skillbridge.io</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Phone className="w-4 h-4 text-primary mt-1 shrink-0" />
+                <span>+1 (555) 000-0000</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 text-primary mt-1 shrink-0" />
+                <span className="leading-relaxed">123 Education St, Innovation City, DX 4040</span>
+              </li>
+            </ul>
           </div>
+
         </div>
-      </div>
 
-      {/* Bottom Legal Links */}
-      <div className="bg-primary text-white">
-        <div className="container mx-auto px-4 py-6 flex items-center justify-between">
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <a href="#" className="hover:underline">
-              Website Terms
-            </a>
-            <span className="text-primary-foreground/40">|</span>
-            <a href="#" className="hover:underline">
-              Privacy Policy
-            </a>
-          </div>
+        {/* Divider */}
+        <div className="h-px bg-slate-800 w-full mt-16 mb-8" />
 
-          <div className="text-sm font-light">
-            &copy; {new Date().getFullYear()} SkillBridge. All rights reserved.
+        {/* Bottom Section */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-xs text-slate-500 font-medium tracking-wide">
+            &copy; {new Date().getFullYear()} SkillBridge Inc. All rights reserved.
+          </p>
+          <div className="flex items-center gap-8 text-xs font-semibold tracking-wider text-slate-500 uppercase">
+            <Link href="/terms" className="hover:text-white transition-colors duration-200">Terms of Service</Link>
+            <Link href="/privacy" className="hover:text-white transition-colors duration-200">Privacy Policy</Link>
           </div>
         </div>
       </div>

@@ -75,6 +75,8 @@ export interface TutorProfile {
   user : User;
   availability : Availability[];
   category ?: Category;
+  subjects ?: TutorSubject[];
+  relatedTutors ?: TutorProfile[];
   _count: {
     reviews: number;
   };

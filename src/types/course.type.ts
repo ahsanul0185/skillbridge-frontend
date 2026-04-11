@@ -34,6 +34,7 @@ export interface Course {
   _count?: {
     enrollments: number;
   };
+  relatedCourses?: Course[];
 }
 
 export interface Enrollment {

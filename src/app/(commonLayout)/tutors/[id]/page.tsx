@@ -10,8 +10,9 @@ import { Star, Clock, DollarSign, BookOpen, Calendar, User, Mail, Award } from '
 import CreateBookingDialog from '@/components/modules/student/bookings/CreateBookingDialog';
 import Link from 'next/link';
 import { calcDuration, formatDay, formatTime, getInitials } from '@/lib/utils';
-import { AvailabilityStatus } from '@/types';
+import { AvailabilityStatus, TutorProfile } from '@/types';
 import { userService } from '@/services/user.service';
+import TutorCard from '@/components/modules/tutor/tutorPage/TutorCard';
 
 export default async function TutorDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -231,6 +232,25 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
             </div>
           </CardContent>
         </Card>
+
+        {/* Related Tutors */}
+        {tutor.relatedTutors && tutor.relatedTutors.length > 0 && (
+          <div className="pt-20 pb-10">
+            <div className="mb-10">
+              <h2 className="text-3xl font-bold tracking-tight">
+                Recommended <span className="text-primary">Tutors</span>
+              </h2>
+              <p className="text-muted-foreground mt-2">
+                Other popular educators in {tutor.category.name} you might like
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {tutor.relatedTutors.map((related: TutorProfile) => (
+                <TutorCard key={related.id} tutor={related} user={user} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       <CreateBookingDialog tutor={tutor} />
     </div>
