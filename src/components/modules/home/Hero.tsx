@@ -1,29 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Users, BookOpen, GraduationCap, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { SearchBar } from "./Searchbar";
 import { categoryService } from "@/services/category.service";
 import { Category } from "@/types";
 
 
-const stats = [
-  {
-    icon: Users,
-    value: "500+",
-    label: "Expert Tutors",
-  },
-  {
-    icon: BookOpen,
-    value: "10,000+",
-    label: "Sessions Completed",
-  },
-  {
-    icon: GraduationCap,
-    value: "50+",
-    label: "Subjects Available",
-  },
-];
+
 
 export async function Hero() {
 
@@ -76,37 +59,6 @@ export async function Hero() {
         </div>
       </section>
 
-        <section className="container mx-auto px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {stats.map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <Card
-                  key={index}
-                  className=" border shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-4">
-                      <div className="shrink-0">
-                        <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center">
-                          <Icon className="h-6 w-6 text-white" />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-gray-900">
-                          {stat.value}
-                        </div>
-                        <div className="text-sm text-gray-600 font-medium">
-                          {stat.label}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-      </section>
     </div>
   );
 }

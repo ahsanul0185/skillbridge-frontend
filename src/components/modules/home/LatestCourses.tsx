@@ -27,7 +27,7 @@ export default async function LatestCourses() {
         {courses.map((course) => (
           <div
             key={course.id}
-            className="shrink-0 w-[300px] md:w-[320px]"
+            className="shrink-0 w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.4rem)]"
           >
             <Card className="border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden group h-full">
               <CardContent className="p-0 flex flex-col h-full">

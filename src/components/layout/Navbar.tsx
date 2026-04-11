@@ -1,7 +1,19 @@
 "use client";
 
 
-import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
+import { Book, Menu, Sunset, Trees, Zap, LayoutDashboard, LogOut } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { UserRoles } from "@/types";
 
 import { cn } from "@/lib/utils";
 
@@ -124,6 +136,70 @@ const Navbar = ({
   className,
 }: NavbarProps) => {
 
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/");
+          router.refresh();
+        },
+      },
+    });
+  };
+
+  const getDashboardUrl = (role: string) => {
+    switch (role) {
+      case UserRoles.ADMIN:
+        return "/admin";
+      case UserRoles.TUTOR:
+        return "/tutor/dashboard";
+      case UserRoles.STUDENT:
+        return "/student/dashboard";
+      case UserRoles.INSTITUTE:
+        return "/institute/dashboard";
+      default:
+        return "/dashboard";
+    }
+  };
+
+  const UserMenu = ({ user }: { user: User }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+          <Avatar className="h-10 w-10 border-2 border-primary/10 transition-transform hover:scale-105">
+            {user.image && <AvatarImage src={user.image} alt={user.name} />}
+            <AvatarFallback className="bg-primary/10 text-primary font-bold">
+              {user.name?.split(" ").map((n) => n[0]).join("").toUpperCase() || "U"}
+            </AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-semibold leading-none">{user.name}</p>
+            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+            <p className="text-[10px] leading-none text-primary uppercase font-bold tracking-tighter mt-1">{user.role}</p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href={getDashboardUrl(user.role)} className="cursor-pointer">
+            <LayoutDashboard className="mr-2 h-4 w-4" />
+            <span>Dashboard</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:bg-destructive/10 cursor-pointer">
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Log out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
 
   return (
     <section className={cn("py-4 bg-background z-50 border-b", className)}>
@@ -150,22 +226,19 @@ const Navbar = ({
               </NavigationMenu>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-4">
             {
               user ? 
-              <Button asChild size="sm">
-                <Link href={auth.dashboard.url}>{auth.dashboard.title}</Link>
-              </Button> : 
-              <>
+              <UserMenu user={user} /> : 
+              <div className="flex gap-2">
                <Button asChild variant="outline" size="sm">
                   <Link href={auth.login.url}>{auth.login.title}</Link>
                 </Button>
                 <Button asChild size="sm">
                   <Link href={auth.signup.url}>{auth.signup.title}</Link>
                 </Button>
-              </> 
+              </div> 
             }
-           
           </div>
         </nav>
 
@@ -199,22 +272,38 @@ const Navbar = ({
                     {menu.map((item) => renderMobileMenuItem(item))}
                   </Accordion>
 
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 mt-4">
                     {
                       user ? 
-                      <Button asChild size="sm">
-                        <Link href={auth.dashboard.url}>{auth.dashboard.title}</Link>
-                      </Button> : 
-                      <>
-                      <Button asChild variant="outline" size="sm">
-                          <Link href={auth.login.url}>{auth.login.title}</Link>
-                        </Button>
-                        <Button asChild size="sm">
-                          <Link href={auth.signup.url}>{auth.signup.title}</Link>
-                        </Button>
-                      </> 
+                      <div className="flex flex-col gap-4 p-2 bg-slate-50 rounded-xl">
+                        <div className="flex items-center gap-3">
+                           <Avatar className="h-10 w-10">
+                            {user.image && <AvatarImage src={user.image} alt={user.name} />}
+                            <AvatarFallback>{user.name?.[0]}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="text-sm font-bold">{user.name}</p>
+                            <p className="text-xs text-slate-500">{user.email}</p>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button asChild variant="outline" size="sm" className="justify-start">
+                            <Link href={getDashboardUrl(user.role)}>Dashboard</Link>
+                          </Button>
+                          <Button onClick={handleLogout} variant="destructive" size="sm" className="justify-start">
+                            Log out
+                          </Button>
+                        </div>
+                      </div> : 
+                      <div className="flex flex-col gap-2">
+                        <Button asChild variant="outline" size="sm">
+                            <Link href={auth.login.url}>{auth.login.title}</Link>
+                          </Button>
+                          <Button asChild size="sm">
+                            <Link href={auth.signup.url}>{auth.signup.title}</Link>
+                          </Button>
+                      </div> 
                     }
-                
                 </div>
 
                 </div>
