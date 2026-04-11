@@ -103,7 +103,7 @@ export default function CreateBookingDialog({ tutor }: { tutor: TutorForModal })
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-sm truncate">{tutor.user.name}</p>
-            <p className="text-xs text-muted-foreground">{tutor.category.name}</p>
+            <p className="text-xs text-muted-foreground">{tutor.category?.name ?? "Uncategorized"}</p>
             <div className="flex items-center gap-3 mt-1">
               <span className="flex items-center gap-0.5 text-xs text-muted-foreground">
                 <Star className="h-3 w-3 fill-amber-400 text-amber-400" />

@@ -158,10 +158,10 @@ export default async function CourseDetailsPage({
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-center gap-3">
-                    {course.institute.logoUrl ? (
+                    {course.institute.logoUrl || course.institute.user?.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={course.institute.logoUrl}
+                        src={course.institute.logoUrl || course.institute.user?.image || ""}
                         alt={course.institute.name}
                         className="h-14 w-14 rounded-full object-cover border"
                       />

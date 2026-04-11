@@ -16,7 +16,7 @@ export const instituteRoutes: Route[] = [
     icon: LayoutDashboard,
     items: [
       { title: "Overview", url: "/institute/dashboard", icon: LayoutDashboard },
-      { title: "My Courses", url: "/institute/courses", icon: BookOpen },
+      { title: "Courses", url: "/institute/courses", icon: BookOpen },
       { title: "Mentor Management", url: "/institute/mentors", icon: Users },
       { title: "Student Community", url: "/institute/students", icon: GraduationCap },
       { title: "Reviews & Ratings", url: "/institute/reviews", icon: Star },

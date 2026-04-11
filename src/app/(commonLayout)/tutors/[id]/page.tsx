@@ -75,7 +75,7 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
                     )}
                     <Badge variant="outline" className="text-sm">
                       <BookOpen className="h-3 w-3 mr-1" />
-                      {tutor.category.name}
+                      {tutor.category?.name ?? "Uncategorized"}
                     </Badge>
 
                   </div>
@@ -138,7 +138,7 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
                     className="p-3 bg-secondary/50 rounded-lg border border-border transition-colors"
                   >
                     <p className="font-medium">{subject.subject.name}</p>
-                    <p className="text-sm text-muted-foreground">{tutor.category.name}</p>
+                    <p className="text-sm text-muted-foreground">{tutor.category?.name ?? "Uncategorized"}</p>
                   </div>
                 ))}
               </div>
@@ -241,7 +241,7 @@ export default async function TutorDetailsPage({ params }: { params: Promise<{ i
                 Recommended <span className="text-primary">Tutors</span>
               </h2>
               <p className="text-muted-foreground mt-2">
-                Other popular educators in {tutor.category.name} you might like
+                Other popular educators in {tutor.category?.name ?? "this category"} you might like
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

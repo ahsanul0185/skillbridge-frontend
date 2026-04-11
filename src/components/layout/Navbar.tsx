@@ -169,7 +169,7 @@ const Navbar = ({
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
           <Avatar className="h-10 w-10 border-2 border-primary/10 transition-transform hover:scale-105">
-            {user.image && <AvatarImage src={user.image} alt={user.name} />}
+            <AvatarImage src={user?.image || undefined} alt={user?.name || "avatar"} />
             <AvatarFallback className="bg-primary/10 text-primary font-bold">
               {user.name?.split(" ").map((n) => n[0]).join("").toUpperCase() || "U"}
             </AvatarFallback>
@@ -278,7 +278,7 @@ const Navbar = ({
                       <div className="flex flex-col gap-4 p-2 bg-slate-50 rounded-xl">
                         <div className="flex items-center gap-3">
                            <Avatar className="h-10 w-10">
-                            {user.image && <AvatarImage src={user.image} alt={user.name} />}
+                            <AvatarImage src={user?.image || undefined} alt={user?.name || "avatar"} />
                             <AvatarFallback>{user.name?.[0]}</AvatarFallback>
                           </Avatar>
                           <div>

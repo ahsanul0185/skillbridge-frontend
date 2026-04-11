@@ -8,7 +8,7 @@ import Link from "next/link";
 
 interface CourseCardProps {
   course: Course & {
-    institute?: { name: string; logoUrl?: string | null };
+    institute?: { name: string; logoUrl?: string | null; user?: { image?: string | null } };
     mentors?: { id: string; user: { name: string; image: string | null } }[];
     _count?: { enrollments: number };
   };
@@ -50,10 +50,10 @@ export default function CourseCard({ course }: CourseCardProps) {
         {/* Institute */}
         {course.institute && (
           <div className="flex items-center gap-2 mt-1">
-            {course.institute.logoUrl ? (
+            {course.institute.logoUrl || course.institute.user?.image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={course.institute.logoUrl}
+                src={course.institute.logoUrl || course.institute.user?.image || ""}
                 alt={course.institute.name}
                 className="h-5 w-5 rounded-full object-cover"
               />

@@ -70,7 +70,7 @@ export default async function FeaturedTutors() {
                     </h3>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Badge variant="outline" className="font-medium">
-                        {tutor.category.name}
+                        {tutor.category?.name ?? "Uncategorized"}
                       </Badge>
                     </div>
                   </div>
